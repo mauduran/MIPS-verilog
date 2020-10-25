@@ -1,0 +1,113 @@
+C:/MIPS/sources/Mux_Register_File.v {1 {vlog -work work -stats=none C:/MIPS/sources/Mux_Register_File.v
+Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+-- Compiling module Mux_Register_File
+
+Top level modules:
+	Mux_Register_File
+
+} {} {}} C:/MIPS/sources/Multiplexer_2_to_1.v {1 {vlog -work work -stats=none C:/MIPS/sources/Multiplexer_2_to_1.v
+Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+-- Compiling module Multiplexer_2_to_1
+
+Top level modules:
+	Multiplexer_2_to_1
+
+} {} {}} C:/MIPS/sources/Program_Counter.v {1 {vlog -work work -stats=none C:/MIPS/sources/Program_Counter.v
+Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+-- Compiling module Program_Counter
+
+Top level modules:
+	Program_Counter
+
+} {} {}} C:/MIPS/sources/Control.v {1 {vlog -work work -stats=none C:/MIPS/sources/Control.v
+Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+-- Compiling module Control
+
+Top level modules:
+	Control
+
+} {} {}} C:/MIPS/sources/ALU.v {1 {vlog -work work -stats=none C:/MIPS/sources/ALU.v
+Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+-- Compiling module ALU
+
+Top level modules:
+	ALU
+
+} {} {}} C:/MIPS/sources/Data_Memory.v {1 {vlog -work work -stats=none C:/MIPS/sources/Data_Memory.v
+Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+-- Compiling module Data_Memory
+
+Top level modules:
+	Data_Memory
+
+} {} {}} C:/MIPS/sources/Register_File.v {1 {vlog -work work -stats=none C:/MIPS/sources/Register_File.v
+Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+-- Compiling module Register_File
+
+Top level modules:
+	Register_File
+
+} {} {}} C:/MIPS/sources/Register.v {1 {vlog -work work -stats=none C:/MIPS/sources/Register.v
+Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+-- Compiling module Register
+
+Top level modules:
+	Register
+
+} {} {}} C:/MIPS/sources/MIPS_Processor_TB.v {1 {vlog -work work -stats=none C:/MIPS/sources/MIPS_Processor_TB.v
+Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+-- Compiling module MIPS_Processor_TB
+
+Top level modules:
+	MIPS_Processor_TB
+
+} {} {}} C:/MIPS/sources/Program_Memory.v {1 {vlog -work work -stats=none C:/MIPS/sources/Program_Memory.v
+Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+-- Compiling module Program_Memory
+
+Top level modules:
+	Program_Memory
+
+} {} {}} C:/MIPS/sources/Sign_Extend.v {1 {vlog -work work -stats=none C:/MIPS/sources/Sign_Extend.v
+Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+-- Compiling module Sign_Extend
+
+Top level modules:
+	Sign_Extend
+
+} {} {}} C:/MIPS/sources/Adder.v {1 {vlog -work work -stats=none C:/MIPS/sources/Sign_Extend.v
+Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+-- Compiling module Sign_Extend
+
+Top level modules:
+	Sign_Extend
+
+} {} {}} C:/MIPS/sources/MIPS_Processor.v {1 {vlog -work work -stats=none C:/MIPS/sources/Sign_Extend.v
+Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+-- Compiling module Sign_Extend
+
+Top level modules:
+	Sign_Extend
+
+} {} {}} C:/MIPS/sources/Shift_Left_2.v {1 {vlog -work work -stats=none C:/MIPS/sources/Shift_Left_2.v
+Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+-- Compiling module Shift_Left_2
+
+Top level modules:
+	Shift_Left_2
+
+} {} {}} C:/MIPS/sources/Decoder_Register_File.v {1 {vlog -work work -stats=none C:/MIPS/sources/Decoder_Register_File.v
+Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+-- Compiling module Decoder_Register_File
+
+Top level modules:
+	Decoder_Register_File
+
+} {} {}} C:/MIPS/sources/ALU_Control.v {1 {vlog -work work -stats=none C:/MIPS/sources/ALU_Control.v
+Model Technology ModelSim - Intel FPGA Edition vlog 2020.1 Compiler 2020.02 Feb 28 2020
+-- Compiling module ALU_Control
+
+Top level modules:
+	ALU_Control
+
+} {} {}}

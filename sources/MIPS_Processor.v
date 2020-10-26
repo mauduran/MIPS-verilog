@@ -187,6 +187,7 @@ ALU_UNIT
 	.alu_operation_i(alu_operation_w),
 	.a_i(read_data_1_w),
 	.b_i(read_ata_2_r_nmmediate_w),
+	.shamt(instruction_w[10:6]), /*Added shamt to ALU unit */
 	.zero_o(zero_w),
 	.alu_data_o(alu_result_w)
 );

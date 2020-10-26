@@ -28,6 +28,7 @@ module Control
 
 
 localparam R_TYPE = 0;
+
 localparam I_TYPE_ADDI = 6'h8;
 localparam I_TYPE_LUI = 6'hf;
 localparam I_TYPE_ORI = 6'hd;

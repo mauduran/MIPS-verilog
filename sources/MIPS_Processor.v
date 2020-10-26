@@ -86,7 +86,6 @@ PC
 	.pc_value_o(pc_w)
 );
 
-
 Program_Memory
 #
 (
@@ -97,6 +96,7 @@ ROM
 	.address_i(pc_w),
 	.instruction_o(instruction_w)
 );
+
 
 
 

@@ -28,7 +28,7 @@ module Control
 
 
 localparam R_TYPE = 0;
-localparam I_TYPE_ADDI = 6'h8;
+
 
 
 reg [10:0] control_values_r;
@@ -38,7 +38,6 @@ always@(opcode_i) begin
 	case(opcode_i)
 	
 		R_TYPE     :  control_values_r = 11'b1_001_00_00_111;
-		I_TYPE_ADDI:  control_values_r = 11'b0_101_00_00_100;
 
 
 		default:
@@ -47,15 +46,15 @@ always@(opcode_i) begin
 		
 end	
 	
-assign reg_dst_o = control_values_r[10]; /*Rd(1) o Rt(0) para el destino*/
-assign alu_src_o = control_values_r[9]; /*Viene de segunda salida (rd) de register o viene de inmediato*/
-assign mem_to_reg_o = control_values_r[8]; /*El dato viene de la memoria=1 */
-assign reg_write_o = control_values_r[7]; /* Resultado se guarda en algun registro*/
-assign mem_read_o = control_values_r[6];	/* read from memory */
-assign mem_write_o = control_values_r[5]; /* write to memory */
+assign reg_dst_o = control_values_r[10];
+assign alu_src_o = control_values_r[9];
+assign mem_to_reg_o = control_values_r[8];
+assign reg_write_o = control_values_r[7];
+assign mem_read_o = control_values_r[6];
+assign mem_write_o = control_values_r[5];
 assign branch_ne_o = control_values_r[4];
-assign branch_eq_o = control_values_r[3]; 
-assign alu_op_o = control_values_r[2:0];	/*Arbitrary*/
+assign branch_eq_o = control_values_r[3];
+assign alu_op_o = control_values_r[2:0];	
 
 endmodule
 

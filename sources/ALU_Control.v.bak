@@ -23,9 +23,6 @@ module ALU_Control
 
 
 localparam R_TYPE_ADD    = 9'b111_100000;
-localparam I_TYPE_OR   	 = 9'b100_100101;
-localparam I_TYPE_ADDI   = 9'b100_xxxxxx;
-
 
 
 
@@ -39,7 +36,7 @@ always@(selector_w)begin
 	casex(selector_w)
 	
 		R_TYPE_ADD:    alu_control_values_r = 4'b0011;
-		I_TYPE_ADDI:    alu_control_values_r = 4'b0011;
+
 
 		default: alu_control_values_r = 4'b1001;
 	endcase

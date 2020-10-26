@@ -26,6 +26,7 @@ localparam R_TYPE_ADD    = 9'b111_100000;
 localparam R_TYPE_OR   	 = 9'b111_100101;
 localparam I_TYPE_ADDI   = 9'b100_xxxxxx;
 localparam I_TYPE_LUI   = 9'b000_xxxxxx;
+localparam I_TYPE_ORI	= 9'b001_xxxxxx;
 
 
 
@@ -42,6 +43,7 @@ always@(selector_w)begin
 		R_TYPE_ADD:    alu_control_values_r = 4'b0011;
 		I_TYPE_ADDI:    alu_control_values_r = 4'b0011;
 		I_TYPE_LUI:		alu_control_values_r = 4'b0000;
+		I_TYPE_ORI:		alu_control_values_r = 4'b0001;
 
 		default: alu_control_values_r = 4'b1001;
 	endcase

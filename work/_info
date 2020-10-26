@@ -10,7 +10,7 @@ z2
 cModel Technology
 dC:/intelFPGA_lite/20.1
 vAdder
-Z0 !s110 1603674247
+Z0 !s110 1603677156
 !i10b 1
 !s100 PnkOOz;aHdP;E:B^[AmB_2
 Z1 !s11b Dg1SIo80bB@j0V0VzS_@n1
@@ -20,13 +20,13 @@ Z3 dC:/MIPS
 w1602811252
 8C:/MIPS/sources/Adder.v
 FC:/MIPS/sources/Adder.v
-!i122 298
+!i122 346
 L0 13 16
 Z4 OV;L;2020.1;71
 r1
 !s85 0
 31
-Z5 !s108 1603674247.000000
+Z5 !s108 1603677156.000000
 !s107 C:/MIPS/sources/Adder.v|
 !s90 -reportprogress|300|-work|work|-stats=none|C:/MIPS/sources/Adder.v|
 !i113 1
@@ -36,16 +36,16 @@ n@adder
 vALU
 R0
 !i10b 1
-!s100 ]2nK1zmeRLB1Rj5e@?Qz20
+!s100 LNdO3OOiSLWD9YUR2mnWT2
 R1
-I0DCkGlkJ`YP]BZc3LAW``3
+I;O6<CF6JOGB]3zAm?22980
 R2
 R3
-w1603673871
+w1603677126
 8C:/MIPS/sources/ALU.v
 FC:/MIPS/sources/ALU.v
-!i122 299
-L0 20 33
+!i122 347
+L0 20 35
 R4
 r1
 !s85 0
@@ -60,16 +60,16 @@ n@a@l@u
 vALU_Control
 R0
 !i10b 1
-!s100 HTf3?7OdmDRfTL8K]n^EK3
+!s100 CAmgK^1oC1YPjZCRidb]W1
 R1
-Ic1R8OED[WRCaWG06UY<dD2
+ImiXdKT`XaFd?D^C1nHWhi3
 R2
 R3
-w1603673501
+w1603676618
 8C:/MIPS/sources/ALU_Control.v
 FC:/MIPS/sources/ALU_Control.v
-!i122 300
-L0 15 40
+!i122 348
+L0 15 42
 R4
 r1
 !s85 0
@@ -84,16 +84,16 @@ n@a@l@u_@control
 vControl
 R0
 !i10b 1
-!s100 <97n3aKRL]Y6>2G]WnB;d1
+!s100 X2oSf39eCN]>`[N<;2PR80
 R1
-I2D=V`eWkm@XBnBLeQ<7OT1
+Inmc;jMEN0mzK69UI=EP1I0
 R2
 R3
-w1603672244
+w1603676491
 8C:/MIPS/sources/Control.v
 FC:/MIPS/sources/Control.v
-!i122 301
-L0 14 48
+!i122 349
+L0 14 50
 R4
 r1
 !s85 0
@@ -106,7 +106,7 @@ R6
 R7
 n@control
 vData_Memory
-Z8 !s110 1603674248
+R0
 !i10b 1
 !s100 B7A9zPUZO8T[SzIVFl2AX1
 R1
@@ -116,7 +116,7 @@ R3
 w1602793690
 8C:/MIPS/sources/Data_Memory.v
 FC:/MIPS/sources/Data_Memory.v
-!i122 302
+!i122 350
 L0 13 26
 R4
 r1
@@ -130,7 +130,7 @@ R6
 R7
 n@data_@memory
 vDecoder_Register_File
-R8
+R0
 !i10b 1
 !s100 [NG@E0R0A@YcJ`VaGG8Je2
 R1
@@ -140,13 +140,13 @@ R3
 w1602781082
 8C:/MIPS/sources/Decoder_Register_File.v
 FC:/MIPS/sources/Decoder_Register_File.v
-!i122 303
+!i122 351
 L0 12 48
 R4
 r1
 !s85 0
 31
-Z9 !s108 1603674248.000000
+R5
 !s107 C:/MIPS/sources/Decoder_Register_File.v|
 !s90 -reportprogress|300|-work|work|-stats=none|C:/MIPS/sources/Decoder_Register_File.v|
 !i113 1
@@ -154,7 +154,7 @@ R6
 R7
 n@decoder_@register_@file
 vMIPS_Processor
-Z10 !s110 1603674249
+Z8 !s110 1603677157
 !i10b 1
 !s100 nY^@oj<8fd81M9=MIh00I0
 R1
@@ -164,13 +164,13 @@ R3
 w1603655022
 8C:/MIPS/sources/MIPS_Processor.v
 FC:/MIPS/sources/MIPS_Processor.v
-!i122 304
+!i122 352
 L0 28 170
 R4
 r1
 !s85 0
 31
-R9
+R5
 !s107 C:/MIPS/sources/MIPS_Processor.v|
 !s90 -reportprogress|300|-work|work|-stats=none|C:/MIPS/sources/MIPS_Processor.v|
 !i113 1
@@ -178,7 +178,7 @@ R6
 R7
 n@m@i@p@s_@processor
 vMIPS_Processor_TB
-R10
+R8
 !i10b 1
 !s100 C8GTWT02SaGke=4GoOmb22
 R1
@@ -188,13 +188,13 @@ R3
 w1603219938
 8C:/MIPS/sources/MIPS_Processor_TB.v
 FC:/MIPS/sources/MIPS_Processor_TB.v
-!i122 305
+!i122 353
 L0 15 27
 R4
 r1
 !s85 0
 31
-Z11 !s108 1603674249.000000
+Z9 !s108 1603677157.000000
 !s107 C:/MIPS/sources/MIPS_Processor_TB.v|
 !s90 -reportprogress|300|-work|work|-stats=none|C:/MIPS/sources/MIPS_Processor_TB.v|
 !i113 1
@@ -202,7 +202,7 @@ R6
 R7
 n@m@i@p@s_@processor_@t@b
 vMultiplexer_2_to_1
-R10
+R8
 !i10b 1
 !s100 QhhVD2?;2B;]RdJWRC<SN1
 R1
@@ -212,13 +212,13 @@ R3
 w1602782822
 8C:/MIPS/sources/Multiplexer_2_to_1.v
 FC:/MIPS/sources/Multiplexer_2_to_1.v
-!i122 306
+!i122 354
 L0 13 21
 R4
 r1
 !s85 0
 31
-R11
+R9
 !s107 C:/MIPS/sources/Multiplexer_2_to_1.v|
 !s90 -reportprogress|300|-work|work|-stats=none|C:/MIPS/sources/Multiplexer_2_to_1.v|
 !i113 1
@@ -226,7 +226,7 @@ R6
 R7
 n@multiplexer_2_to_1
 vMux_Register_File
-R10
+R8
 !i10b 1
 !s100 g<S=38b_jXoO9zNhC;m]D2
 R1
@@ -236,13 +236,13 @@ R3
 w1602782502
 8C:/MIPS/sources/Mux_Register_File.v
 FC:/MIPS/sources/Mux_Register_File.v
-!i122 307
+!i122 355
 L0 2 82
 R4
 r1
 !s85 0
 31
-R11
+R9
 !s107 C:/MIPS/sources/Mux_Register_File.v|
 !s90 -reportprogress|300|-work|work|-stats=none|C:/MIPS/sources/Mux_Register_File.v|
 !i113 1
@@ -250,7 +250,7 @@ R6
 R7
 n@mux_@register_@file
 vProgram_Counter
-Z12 !s110 1603674250
+R8
 !i10b 1
 !s100 `d0XWPec8okV4o3RTRkib3
 R1
@@ -260,13 +260,13 @@ R3
 w1603672710
 8C:/MIPS/sources/Program_Counter.v
 FC:/MIPS/sources/Program_Counter.v
-!i122 308
+!i122 356
 L0 15 21
 R4
 r1
 !s85 0
 31
-Z13 !s108 1603674250.000000
+R9
 !s107 C:/MIPS/sources/Program_Counter.v|
 !s90 -reportprogress|300|-work|work|-stats=none|C:/MIPS/sources/Program_Counter.v|
 !i113 1
@@ -274,7 +274,7 @@ R6
 R7
 n@program_@counter
 vProgram_Memory
-R12
+R8
 !i10b 1
 !s100 f0V`a8Ff[N]jadUfF?>:?2
 R1
@@ -284,13 +284,13 @@ R3
 w1603672697
 8C:/MIPS/sources/Program_Memory.v
 FC:/MIPS/sources/Program_Memory.v
-!i122 309
+!i122 357
 L0 15 29
 R4
 r1
 !s85 0
 31
-R13
+R9
 !s107 C:/MIPS/sources/Program_Memory.v|
 !s90 -reportprogress|300|-work|work|-stats=none|C:/MIPS/sources/Program_Memory.v|
 !i113 1
@@ -298,7 +298,7 @@ R6
 R7
 n@program_@memory
 vRegister
-R12
+Z10 !s110 1603677158
 !i10b 1
 !s100 h?:e^7[K@k0M4=>_YJcJA1
 R1
@@ -308,13 +308,13 @@ R3
 w1602782406
 8C:/MIPS/sources/Register.v
 FC:/MIPS/sources/Register.v
-!i122 310
+!i122 358
 L0 12 23
 R4
 r1
 !s85 0
 31
-R13
+R9
 !s107 C:/MIPS/sources/Register.v|
 !s90 -reportprogress|300|-work|work|-stats=none|C:/MIPS/sources/Register.v|
 !i113 1
@@ -322,7 +322,7 @@ R6
 R7
 n@register
 vRegister_File
-R12
+R10
 !i10b 1
 !s100 Hd^V24XQMNODLF4c6hz3H1
 R1
@@ -332,13 +332,13 @@ R3
 w1602782624
 8C:/MIPS/sources/Register_File.v
 FC:/MIPS/sources/Register_File.v
-!i122 311
+!i122 359
 L0 15 512
 R4
 r1
 !s85 0
 31
-R13
+Z11 !s108 1603677158.000000
 !s107 C:/MIPS/sources/Register_File.v|
 !s90 -reportprogress|300|-work|work|-stats=none|C:/MIPS/sources/Register_File.v|
 !i113 1
@@ -346,7 +346,7 @@ R6
 R7
 n@register_@file
 vShift_Left_2
-Z14 !s110 1603674251
+R10
 !i10b 1
 !s100 hkA]^D;FL70JCJ[Y69aGA0
 R1
@@ -356,13 +356,13 @@ R3
 w1602779114
 8C:/MIPS/sources/Shift_Left_2.v
 FC:/MIPS/sources/Shift_Left_2.v
-!i122 312
+!i122 360
 L0 12 10
 R4
 r1
 !s85 0
 31
-R13
+R11
 !s107 C:/MIPS/sources/Shift_Left_2.v|
 !s90 -reportprogress|300|-work|work|-stats=none|C:/MIPS/sources/Shift_Left_2.v|
 !i113 1
@@ -370,7 +370,7 @@ R6
 R7
 n@shift_@left_2
 vSign_Extend
-R14
+R10
 !i10b 1
 !s100 kKf<`acS@l9?U5i`6:]O<3
 R1
@@ -380,13 +380,13 @@ R3
 w1602777906
 8C:/MIPS/sources/Sign_Extend.v
 FC:/MIPS/sources/Sign_Extend.v
-!i122 313
+!i122 361
 L0 14 9
 R4
 r1
 !s85 0
 31
-!s108 1603674251.000000
+R11
 !s107 C:/MIPS/sources/Sign_Extend.v|
 !s90 -reportprogress|300|-work|work|-stats=none|C:/MIPS/sources/Sign_Extend.v|
 !i113 1

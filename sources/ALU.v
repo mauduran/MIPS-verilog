@@ -31,6 +31,7 @@ localparam ADD = 4'b0011;
 localparam LUI = 4'b0000;
 localparam OR = 4'b0001;
 localparam SLL = 4'b0010;
+localparam SRL = 4'b0100;
    
    always @ (a_i or b_i or alu_operation_i)
      begin
@@ -44,6 +45,8 @@ localparam SLL = 4'b0010;
 			alu_data_o = a_i | b_i;
 		  SLL:
 		   alu_data_o = b_i<<shamt;
+		  SRL:
+			alu_data_o = b_i>>shamt;
 			
 			
 		default:

@@ -1,5 +1,5 @@
 Analysis & Elaboration report for MIPS_Processor
-Sat Oct 24 20:31:25 2020
+Sun Oct 25 19:01:18 2020
 Quartus Prime Version 20.1.0 Build 711 06/05/2020 SJ Lite Edition
 
 
@@ -81,7 +81,7 @@ https://fpgasoftware.intel.com/eula.
 +----------------------------------------------------------------------------------+
 ; Analysis & Elaboration Summary                                                   ;
 +------------------------------------+---------------------------------------------+
-; Analysis & Elaboration Status      ; Successful - Sat Oct 24 20:31:25 2020       ;
+; Analysis & Elaboration Status      ; Successful - Sun Oct 25 19:01:18 2020       ;
 ; Quartus Prime Version              ; 20.1.0 Build 711 06/05/2020 SJ Lite Edition ;
 ; Revision Name                      ; MIPS_Processor                              ;
 ; Top-level Entity Name              ; MIPS_Processor                              ;
@@ -651,7 +651,7 @@ Note: In order to hide this table in the UI and the text report file, please set
 Info: *******************************************************************
 Info: Running Quartus Prime Analysis & Elaboration
     Info: Version 20.1.0 Build 711 06/05/2020 SJ Lite Edition
-    Info: Processing started: Sat Oct 24 20:31:11 2020
+    Info: Processing started: Sun Oct 25 19:01:07 2020
 Info: Command: quartus_map --read_settings_files=on --write_settings_files=off MIPS_Processor -c MIPS_Processor --analysis_and_elaboration
 Warning (18236): Number of processors has not been specified which may cause overloading on shared machines.  Set the global assignment NUM_PARALLEL_PROCESSORS in your QSF to an appropriate value for best performance.
 Info (20030): Parallel compilation is enabled and will use 4 of the 4 processors detected
@@ -692,7 +692,7 @@ Warning (10236): Verilog HDL Implicit Net warning at MIPS_Processor.v(74): creat
 Info (12127): Elaborating entity "MIPS_Processor" for the top level hierarchy
 Info (12128): Elaborating entity "Control" for hierarchy "Control:CONTROL_UNIT" File: C:/MIPS/sources/MIPS_Processor.v Line: 78
 Info (12128): Elaborating entity "Program_Counter" for hierarchy "Program_Counter:PC" File: C:/MIPS/sources/MIPS_Processor.v Line: 87
-Info (12128): Elaborating entity "Program_Memory" for hierarchy "Program_Memory:ROM" File: C:/MIPS/sources/MIPS_Processor.v Line: 99
+Info (12128): Elaborating entity "Program_Memory" for hierarchy "Program_Memory:ROM" File: C:/MIPS/sources/MIPS_Processor.v Line: 98
 Warning (10850): Verilog HDL warning at Program_Memory.v(35): number of words (13) in memory file does not match the number of elements in the address range [0:31] File: C:/MIPS/sources/Program_Memory.v Line: 35
 Warning (10030): Net "rom.data_a" at Program_Memory.v(31) has no driver or initial value, using a default initial value '0' File: C:/MIPS/sources/Program_Memory.v Line: 31
 Warning (10030): Net "rom.waddr_a" at Program_Memory.v(31) has no driver or initial value, using a default initial value '0' File: C:/MIPS/sources/Program_Memory.v Line: 31
@@ -707,11 +707,12 @@ Info (12128): Elaborating entity "Sign_Extend" for hierarchy "Sign_Extend:SIGNED
 Info (12128): Elaborating entity "Multiplexer_2_to_1" for hierarchy "Multiplexer_2_to_1:MUX_READ_DATA_2_OR_IMMEDIATE" File: C:/MIPS/sources/MIPS_Processor.v Line: 170
 Info (12128): Elaborating entity "ALU_Control" for hierarchy "ALU_Control:ALU_CTRL" File: C:/MIPS/sources/MIPS_Processor.v Line: 180
 Info (12128): Elaborating entity "ALU" for hierarchy "ALU:ALU_UNIT" File: C:/MIPS/sources/MIPS_Processor.v Line: 192
+Warning (10230): Verilog HDL assignment warning at ALU.v(40): truncated value with size 48 to match size of target (32) File: C:/MIPS/sources/ALU.v Line: 40
 Warning (12241): 1 hierarchies have connectivity warnings - see the Connectivity Checks report folder
-Info: Quartus Prime Analysis & Elaboration was successful. 0 errors, 8 warnings
-    Info: Peak virtual memory: 4713 megabytes
-    Info: Processing ended: Sat Oct 24 20:31:25 2020
-    Info: Elapsed time: 00:00:14
-    Info: Total CPU time (on all processors): 00:00:30
+Info: Quartus Prime Analysis & Elaboration was successful. 0 errors, 9 warnings
+    Info: Peak virtual memory: 4711 megabytes
+    Info: Processing ended: Sun Oct 25 19:01:18 2020
+    Info: Elapsed time: 00:00:11
+    Info: Total CPU time (on all processors): 00:00:25
 
 

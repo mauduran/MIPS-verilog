@@ -29,7 +29,7 @@ module Control
 
 localparam R_TYPE = 0;
 localparam I_TYPE_ADDI = 6'h8;
-
+localparam I_TYPE_LUI = 6'hf;
 
 reg [10:0] control_values_r;
 
@@ -39,6 +39,7 @@ always@(opcode_i) begin
 	
 		R_TYPE     :  control_values_r = 11'b1_001_00_00_111;
 		I_TYPE_ADDI:  control_values_r = 11'b0_101_00_00_100;
+		I_TYPE_LUI:	  control_values_r = 11'b0_101_00_00_000;
 
 
 		default:
@@ -48,7 +49,7 @@ always@(opcode_i) begin
 end	
 	
 assign reg_dst_o = control_values_r[10]; /*Rd(1) o Rt(0) para el destino*/
-assign alu_src_o = control_values_r[9]; /*Viene de segunda salida (rd) de register o viene de inmediato*/
+assign alu_src_o = control_values_r[9]; /*Viene de segunda salida 0(rd) de register o viene de inmediato*/
 assign mem_to_reg_o = control_values_r[8]; /*El dato viene de la memoria=1 */
 assign reg_write_o = control_values_r[7]; /* Resultado se guarda en algun registro*/
 assign mem_read_o = control_values_r[6];	/* read from memory */

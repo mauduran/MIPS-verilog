@@ -1,7 +1,7 @@
 	
 	.text
 	
-	lui $t0, 3
+	addi $t0, $zero, 3
 	ori $t0, 4
 	# Initializations
 	addi $t0,$zero,2

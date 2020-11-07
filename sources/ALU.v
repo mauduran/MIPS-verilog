@@ -36,7 +36,7 @@ localparam SRL = 4'b0100;
 localparam AND = 4'b0110;
 localparam NOR = 4'b0111;
    
-   always @ (a_i or b_i or alu_operation_i)
+   always @ (a_i or b_i or alu_operation_i or shamt)
      begin
 		case (alu_operation_i)
 		

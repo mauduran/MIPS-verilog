@@ -30,10 +30,11 @@ module ALU
 localparam ADD = 4'b0011;
 localparam SUB = 4'b0101;
 localparam LUI = 4'b0000;
-localparam OR = 4'b0001;
+localparam OR  = 4'b0001;
 localparam SLL = 4'b0010;
 localparam SRL = 4'b0100;
 localparam AND = 4'b0110;
+localparam NOR = 4'b0111;
    
    always @ (a_i or b_i or alu_operation_i)
      begin
@@ -49,6 +50,8 @@ localparam AND = 4'b0110;
 			alu_data_o = a_i | b_i;
 		  AND:
 			alu_data_o = a_i & b_i;
+		  NOR:
+			alu_data_o = ~(a_i | b_i);
 		  SLL:
 		   alu_data_o = b_i<<shamt;
 		  SRL:

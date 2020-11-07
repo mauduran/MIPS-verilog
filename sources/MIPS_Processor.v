@@ -40,6 +40,16 @@ module MIPS_Processor
 //******************************************************************/
 // Data types to connect modules
 
+
+// Added Values
+wire mem_read_w;
+wire mem_write_w;
+wire mem_to_reg_w;
+wire [31:0] read_data_out_w;
+wire [31:0] read_data_or_alu_result_w;
+
+//
+
 wire reg_dst_w;
 wire alu_rc_w;
 wire reg_write_w;
@@ -74,7 +84,10 @@ CONTROL_UNIT
 	.branch_eq_o(branch_eq_w),
 	.alu_op_o(alu_op_w),
 	.alu_src_o(alu_rc_w),
-	.reg_write_o(reg_write_w)
+	.reg_write_o(reg_write_w),
+	.mem_read_o(mem_read_w),
+	.mem_to_reg_o(mem_to_reg_w),
+	.mem_write_o(mem_write_w),
 );
 
 Program_Counter
@@ -96,7 +109,6 @@ ROM
 	.address_i(pc_w),
 	.instruction_o(instruction_w)
 );
-
 
 
 
@@ -140,7 +152,7 @@ REGISTER_FILE_UNIT
 	.write_register_i(write_register_w),
 	.read_register_1_i(instruction_w[25:21]),
 	.read_register_2_i(instruction_w[20:16]),
-	.write_data_i(alu_result_w),
+	.write_data_i(read_data_or_alu_result_w),
 	.read_data_1_o(read_data_1_w),
 	.read_data_2_o(read_data_2_w)
 
@@ -190,6 +202,36 @@ ALU_UNIT
 	.shamt(instruction_w[10:6]), /*Added shamt to ALU unit */
 	.zero_o(zero_w),
 	.alu_data_o(alu_result_w)
+);
+
+
+Data_Memory 
+#
+(
+	.MEMORY_DEPTH(MEMORY_DEPTH)
+)
+RAM
+(
+	.write_data_i(read_data_2_w),
+	.address_i(alu_result_w),
+	.mem_write_i(mem_write_w),
+	.mem_read_i(mem_read_w),
+	.clk(clk),
+	.data_o(read_data_out_w),
+);
+
+Multiplexer_2_to_1
+#(
+	.N_BITS(32)
+)
+MUX_MEM_TO_REG_READ_DATA_OR_ALU_RESULT
+(
+	.selector_i(mem_to_reg_w),
+	.data_0_i(read_data_out_w),
+	.data_1_i(alu_result_w),
+	
+	.mux_o(read_data_or_alu_result_w)
+
 );
 
 assign alu_result_o = alu_result_w;

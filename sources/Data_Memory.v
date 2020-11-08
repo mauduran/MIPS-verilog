@@ -26,16 +26,17 @@ module Data_Memory
 	// Declare the RAM variable
 	reg [DATA_WIDTH-1:0] ram[MEMORY_DEPTH-1:0];
 	wire [DATA_WIDTH-1:0] read_data_aux;
-	wire [DATA_WIDTH-1:0] temp_reg;
+	wire [DATA_WIDTH-1:0] real_address;
+	
+	assign real_address = (address_i-32'h10010000)>>2;
 
 	always @ (posedge clk)
 	begin
 		// Write
 		if (mem_write_i)
-			ram[address_i] <= write_data_i;
+			ram[real_address] <= write_data_i;
 	end
-	assign temp_reg = (address_i-32'h10010000)>>2;
-	assign read_data_aux = ram[(address_i-32'h10010000)>>2];
+	assign read_data_aux = ram[real_address];
   	assign data_o = {DATA_WIDTH{mem_read_i}}& read_data_aux;
 	
 

@@ -227,8 +227,8 @@ Multiplexer_2_to_1
 MUX_MEM_TO_REG_READ_DATA_OR_ALU_RESULT
 (
 	.selector_i(mem_to_reg_w),
-	.data_0_i(read_data_out_w),
-	.data_1_i(alu_result_w),
+	.data_0_i(alu_result_w),
+	.data_1_i(read_data_out_w),
 	
 	.mux_o(read_data_or_alu_result_w)
 

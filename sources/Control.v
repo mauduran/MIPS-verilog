@@ -34,6 +34,7 @@ localparam I_TYPE_LUI = 6'hf;
 localparam I_TYPE_ORI = 6'hd;
 localparam I_TYPE_ANDI = 6'hc;
 localparam I_TYPE_LW  = 6'h23;
+localparam I_TYPE_SW  = 6'h2b;
 
 reg [10:0] control_values_r;
 
@@ -47,6 +48,7 @@ always@(opcode_i) begin
 		I_TYPE_ORI:	  control_values_r = 11'b0_101_00_00_001;
 		I_TYPE_ANDI:  control_values_r = 11'b0_101_00_00_010;
 		I_TYPE_LW: 	  control_values_r = 11'b0_111_10_00_011;
+		I_TYPE_SW:	  control_values_r = 11'b0_100_01_00_101;
 
 		default:
 			control_values_r = 11'b0000000000;

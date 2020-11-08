@@ -87,7 +87,7 @@ CONTROL_UNIT
 	.reg_write_o(reg_write_w),
 	.mem_read_o(mem_read_w),
 	.mem_to_reg_o(mem_to_reg_w),
-	.mem_write_o(mem_write_w),
+	.mem_write_o(mem_write_w)
 );
 
 Program_Counter
@@ -217,7 +217,7 @@ RAM
 	.mem_write_i(mem_write_w),
 	.mem_read_i(mem_read_w),
 	.clk(clk),
-	.data_o(read_data_out_w),
+	.data_o(read_data_out_w)
 );
 
 Multiplexer_2_to_1

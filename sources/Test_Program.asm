@@ -1,6 +1,8 @@
-	.text
-	addi $s2, $zero, 9
-	addi $s3, $zero, 1
-	nor $s1, $s2, $s3
-	
 
+	.text
+	lui $s0, 0x1001
+	ori $s0, $s0, 0x0000
+	
+	addi $s1, $zero, 2
+	sw $s1, 0($s0)
+	

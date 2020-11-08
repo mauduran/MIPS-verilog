@@ -57,6 +57,8 @@ wire zero_w;
 wire [2:0] alu_op_w;
 wire [3:0] alu_operation_w;
 wire [4:0] write_register_w;
+wire [4:0] i_or_r_write_register_w;
+
 wire [31:0] pc_w;
 wire [31:0] instruction_w;
 wire [31:0] read_data_1_w;
@@ -68,8 +70,11 @@ wire [31:0] pc_plus_4_w;
 wire [31:0] shift_branch_w;
 wire [31:0] pc_branch_w;
 wire [31:0] new_pc_w;
+wire [31:0] pc_or_branch_w;
 wire branch_eq_w;
 wire branch_ne_w;
+wire jump_w;
+wire [27:0] instruction_jump_shift_w;
 
 
 
@@ -94,7 +99,8 @@ CONTROL_UNIT
 	.reg_write_o(reg_write_w),
 	.mem_read_o(mem_read_w),
 	.mem_to_reg_o(mem_to_reg_w),
-	.mem_write_o(mem_write_w)
+	.mem_write_o(mem_write_w),
+	.jump_o(jump_w)
 );
 
 Program_Counter
@@ -158,6 +164,24 @@ MUX_PC_OR_BRANCH
 	.data_0_i(pc_plus_4_w),
 	.data_1_i(pc_branch_w),
 	
+	.mux_o(pc_or_branch_w)
+
+);
+ 
+//NEW CODE DONE FOR JUMP
+
+//Shift left realizado de esta manera debido a que su tamaño no es de 32 bits
+assign instruction_jump_shift_w = instruction_w[25:0]<<2;
+
+Multiplexer_2_to_1
+#(
+	.N_BITS(32)
+)
+MUX_JUMP_OR_PC
+(
+	.selector_i(jump_w),
+	.data_0_i(pc_or_branch_w),
+	.data_1_i({pc_plus_4_w[31:28],instruction_jump_shift_w}),
 	.mux_o(new_pc_w)
 
 );
@@ -181,6 +205,8 @@ MUX_R_TYPE_OR_I_Type
 	.mux_o(write_register_w)
 
 );
+
+
 
 
 

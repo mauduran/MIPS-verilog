@@ -154,7 +154,7 @@ Multiplexer_2_to_1
 )
 MUX_PC_OR_BRANCH
 (
-	.selector_i(zero_w & branch_eq_w),
+	.selector_i((zero_w & branch_eq_w) | (~zero_w & branch_ne_w)),
 	.data_0_i(pc_plus_4_w),
 	.data_1_i(pc_branch_w),
 	

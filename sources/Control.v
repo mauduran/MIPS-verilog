@@ -36,6 +36,7 @@ localparam I_TYPE_ANDI = 6'hc;
 localparam I_TYPE_LW  = 6'h23;
 localparam I_TYPE_SW  = 6'h2b;
 localparam I_TYPE_BEQ = 6'h4;
+localparam I_TYPE_BNE = 6'h5;
 
 reg [10:0] control_values_r;
 
@@ -54,6 +55,7 @@ always@(opcode_i) begin
 		I_TYPE_SW:	  control_values_r = 11'b0_100_01_00_100;
 		
 		I_TYPE_BEQ:	  control_values_r = 11'b0_000_00_01_011;
+		I_TYPE_BNE:	  control_values_r = 11'b0_000_00_10_011;
 
 
 		default:

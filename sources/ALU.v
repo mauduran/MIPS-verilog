@@ -45,7 +45,7 @@ localparam NOR = 4'b0111;
 		  SUB: 
 			alu_data_o = a_i - b_i;
 		  LUI: 
-			alu_data_o = {b_i, 16'b0};
+			alu_data_o = {b_i[15:0], 16'b0};
 		  OR:
 			alu_data_o = a_i | b_i;
 		  AND:

@@ -35,6 +35,7 @@ localparam I_TYPE_ORI = 6'hd;
 localparam I_TYPE_ANDI = 6'hc;
 localparam I_TYPE_LW  = 6'h23;
 localparam I_TYPE_SW  = 6'h2b;
+localparam I_TYPE_BEQ = 6'h4;
 
 reg [10:0] control_values_r;
 
@@ -51,6 +52,9 @@ always@(opcode_i) begin
 		//porque eso es lo que se hace en la AL
 		I_TYPE_LW: 	  control_values_r = 11'b0_111_10_00_100;
 		I_TYPE_SW:	  control_values_r = 11'b0_100_01_00_100;
+		
+		I_TYPE_BEQ:	  control_values_r = 11'b0_000_00_01_011;
+
 
 		default:
 			control_values_r = 11'b0000000000;

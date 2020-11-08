@@ -65,6 +65,13 @@ wire [31:0] inmmediate_extend_w;
 wire [31:0] read_ata_2_r_nmmediate_w;
 wire [31:0] alu_result_w;
 wire [31:0] pc_plus_4_w;
+wire [31:0] shift_branch_w;
+wire [31:0] pc_branch_w;
+wire [31:0] new_pc_w;
+wire branch_eq_w;
+wire branch_ne_w;
+
+
 
 
 
@@ -95,7 +102,7 @@ PC
 (
 	.clk(clk),
 	.reset(reset),
-	.new_pc_i(pc_plus_4_w),
+	.new_pc_i(new_pc_w),
 	.pc_value_o(pc_w)
 );
 
@@ -119,6 +126,40 @@ PC_Puls_4
 	.data_1_i(32'h4),
 	
 	.result_o(pc_plus_4_w)
+);
+
+//***********************************
+ Shift_Left_2 
+ BRANCH_ADDRESS_SHIFT_LEFT
+(   
+  .data_i(inmmediate_extend_w),
+  .data_o(shift_branch_w)
+
+);
+
+
+Adder
+PC_ADD_BRANCH
+(
+	.data_0_i(pc_plus_4_w),
+	.data_1_i(shift_branch_w),
+	
+	.result_o(pc_branch_w)
+);
+
+
+Multiplexer_2_to_1
+#(
+	.N_BITS(32)
+)
+MUX_PC_OR_BRANCH
+(
+	.selector_i(zero_w & branch_eq_w),
+	.data_0_i(pc_plus_4_w),
+	.data_1_i(pc_branch_w),
+	
+	.mux_o(new_pc_w)
+
 );
 
 

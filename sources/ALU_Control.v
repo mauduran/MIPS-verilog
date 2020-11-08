@@ -57,8 +57,7 @@ always@(selector_w)begin
 		I_TYPE_ADDI:   alu_control_values_r = 4'b0011;
 		I_TYPE_LUI:		alu_control_values_r = 4'b0000;
 		I_TYPE_ORI:		alu_control_values_r = 4'b0001;
-		I_TYPE_LW:		alu_control_values_r = 4'b0011;
-		I_TYPE_SW:		alu_control_values_r = 4'b0011;
+	
 
 		default: alu_control_values_r = 4'b1001;
 	endcase

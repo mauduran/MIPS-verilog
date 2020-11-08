@@ -47,8 +47,10 @@ always@(opcode_i) begin
 		I_TYPE_LUI:	  control_values_r = 11'b0_101_00_00_000;
 		I_TYPE_ORI:	  control_values_r = 11'b0_101_00_00_001;
 		I_TYPE_ANDI:  control_values_r = 11'b0_101_00_00_010;
-		I_TYPE_LW: 	  control_values_r = 11'b0_111_10_00_011;
-		I_TYPE_SW:	  control_values_r = 11'b0_100_01_00_101;
+		//alu_op de lw y sw pueden ser lo mismo que el ADDI 
+		//porque eso es lo que se hace en la AL
+		I_TYPE_LW: 	  control_values_r = 11'b0_111_10_00_100;
+		I_TYPE_SW:	  control_values_r = 11'b0_100_01_00_100;
 
 		default:
 			control_values_r = 11'b0000000000;

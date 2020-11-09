@@ -17,8 +17,8 @@ module ALU_Control
 	input [2:0] alu_op_i,
 	input [5:0] alu_function_i,
 	
-	output [3:0] alu_operation_o
-
+	output [3:0] alu_operation_o,
+	output jr_o
 );
 
 
@@ -64,6 +64,7 @@ always@(selector_w)begin
 	
 end
 
+assign jr_o = (alu_function_i==6'h8 && alu_op_i==3'b111)? 1'b1: 1'b0;
 
 assign alu_operation_o = alu_control_values_r;
 

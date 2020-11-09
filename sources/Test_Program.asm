@@ -6,6 +6,11 @@
 	add $s1, $s1, 2
 	add $s1, $s1, 2
 	add $s1, $s1, 1
+	
+	j EXIT
 JUMP:
 	addi $s1, $zero, 14
+	jr $ra
 	
+EXIT:
+	nop

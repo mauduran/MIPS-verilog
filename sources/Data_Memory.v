@@ -13,7 +13,7 @@
 module Data_Memory 
 //Previemante tiene valor de 8
 #(	parameter DATA_WIDTH=32,
-	parameter MEMORY_DEPTH = 1024
+	parameter MEMORY_DEPTH = 256
 
 )
 (

@@ -104,8 +104,7 @@ CONTROL_UNIT
 	.mem_read_o(mem_read_w),
 	.mem_to_reg_o(mem_to_reg_w),
 	.mem_write_o(mem_write_w),
-	.jump_o(jump_w),
-	.jr_o(jr_w)
+	.jump_o(jump_w)
 );
 
 Program_Counter
@@ -187,8 +186,21 @@ MUX_JUMP_OR_PC
 	.selector_i(jump_w),
 	.data_0_i(pc_or_branch_w),
 	.data_1_i({pc_plus_4_w[31:28],instruction_jump_shift_w}),
-	.mux_o(new_pc_w)
+	.mux_o(pc_branch_or_jump_w)
 
+);
+
+//Multiplexer to choose between previous PC result or JR value
+Multiplexer_2_to_1
+#(
+	.N_BITS(32)
+)
+MUX_BranchPCJump_Or_Jr
+(
+	.selector_i(jr_w),
+	.data_0_i(pc_branch_or_jump_w),
+	.data_1_i(read_data_1_w),
+	.mux_o(new_pc_w)
 );
 
 
@@ -282,7 +294,8 @@ ALU_CTRL
 (
 	.alu_op_i(alu_op_w),
 	.alu_function_i(instruction_w[5:0]),
-	.alu_operation_o(alu_operation_w)
+	.alu_operation_o(alu_operation_w),
+	.jr_o(jr_w)
 
 );
 

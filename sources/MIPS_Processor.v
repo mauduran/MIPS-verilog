@@ -70,11 +70,15 @@ wire [31:0] pc_plus_4_w;
 wire [31:0] shift_branch_w;
 wire [31:0] pc_branch_w;
 wire [31:0] new_pc_w;
+wire [31:0] pc_branch_or_jump_w;
 wire [31:0] pc_or_branch_w;
 wire branch_eq_w;
 wire branch_ne_w;
 wire jump_w;
+wire jr_w;
 wire [27:0] instruction_jump_shift_w;
+
+wire [31:0] write_data_w;
 
 
 
@@ -100,7 +104,8 @@ CONTROL_UNIT
 	.mem_read_o(mem_read_w),
 	.mem_to_reg_o(mem_to_reg_w),
 	.mem_write_o(mem_write_w),
-	.jump_o(jump_w)
+	.jump_o(jump_w),
+	.jr_o(jr_w)
 );
 
 Program_Counter
@@ -134,7 +139,7 @@ PC_Puls_4
 	.result_o(pc_plus_4_w)
 );
 
-//***********************************
+//*********************************** Jump
  Shift_Left_2 
  BRANCH_ADDRESS_SHIFT_LEFT
 (   
@@ -187,6 +192,8 @@ MUX_JUMP_OR_PC
 );
 
 
+
+
 //******************************************************************/
 //******************************************************************/
 //******************************************************************/
@@ -202,12 +209,27 @@ MUX_R_TYPE_OR_I_Type
 	.data_0_i(instruction_w[20:16]),
 	.data_1_i(instruction_w[15:11]),
 	
-	.mux_o(write_register_w)
+	.mux_o(i_or_r_write_register_w)
 
 );
 
 
+/// Multiplexor to choose between MUX R_TYPE_OR_I_TYPE and register 31 (ra)
 
+
+Multiplexer_2_to_1
+#(
+	.N_BITS(5)
+)
+MUX_Instruction_Type_OR_ra
+(
+	.selector_i(jump_w),
+	.data_0_i(i_or_r_write_register_w),
+	.data_1_i(5'b11111),
+	
+	.mux_o(write_register_w)
+
+);
 
 
 Register_File
@@ -219,11 +241,17 @@ REGISTER_FILE_UNIT
 	.write_register_i(write_register_w),
 	.read_register_1_i(instruction_w[25:21]),
 	.read_register_2_i(instruction_w[20:16]),
-	.write_data_i(read_data_or_alu_result_w),
+	.write_data_i(write_data_w),
 	.read_data_1_o(read_data_1_w),
 	.read_data_2_o(read_data_2_w)
 
 );
+
+
+//Register File read data goes to jr multiplexor
+
+
+
 
 Sign_Extend
 SIGNED_EXTEND_FOR_CONSTANTS
@@ -300,6 +328,22 @@ MUX_MEM_TO_REG_READ_DATA_OR_ALU_RESULT
 	.mux_o(read_data_or_alu_result_w)
 
 );
+
+//MUX to pick between MUX_MEM_TO_REG_READ_DATA_OR_ALU_RESULT and PC+4. This is for the jal instruction
+
+Multiplexer_2_to_1
+#(
+	.N_BITS(32)
+)
+MUX_PCplus4_OR_MUX_MemOrALUres
+(
+	.selector_i(jump_w),
+	.data_0_i(read_data_or_alu_result_w),
+	.data_1_i(pc_plus_4_w),
+	.mux_o(write_data_w)
+
+);
+
 
 assign alu_result_o = alu_result_w;
 

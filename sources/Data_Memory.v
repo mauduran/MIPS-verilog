@@ -28,7 +28,8 @@ module Data_Memory
 	wire [DATA_WIDTH-1:0] read_data_aux;
 	wire [DATA_WIDTH-1:0] real_address;
 	
-	assign real_address = (address_i-32'h10010000)>>2;
+	//assign real_address = (address_i-32'h10010000)>>2;
+	assign real_address = {24'b 0,address_i[7:0]}>>2;
 
 	always @ (posedge clk)
 	begin

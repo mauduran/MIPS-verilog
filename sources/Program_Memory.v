@@ -26,7 +26,8 @@ module Program_Memory
 
 
 wire [(DATA_WIDTH-1):0] real_address_r;
-													
+//Se agfega formula para restar 400_000 al pc de entrada 
+//y shift left right para dividir entre 4													
 assign real_address_r = (address_i[(DATA_WIDTH-1):0]-32'h400000)>>2 ;
 
 
@@ -35,7 +36,7 @@ assign real_address_r = (address_i[(DATA_WIDTH-1):0]-32'h400000)>>2 ;
 
 	initial
 	begin
-		$readmemh("C:/MIPS/sources/test.dat", rom);
+		$readmemh("C:/MIPS/sources/text.dat", rom);
 	end
 
 	always @ (real_address_r)

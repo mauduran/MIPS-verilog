@@ -27,7 +27,7 @@ module Control
 	output [2:0]alu_op_o
 );
 
-
+//Se especifican las instr como localparam a partir del opcode
 localparam R_TYPE = 0;
 
 localparam I_TYPE_ADDI = 6'h8;
@@ -69,7 +69,7 @@ always@(opcode_i) begin
 	endcase
 		
 end
-	
+//Se agrega bandera jump
 assign jump_o = control_values_r[11];
 assign reg_dst_o = control_values_r[10]; /*Rd(1) o Rt(0) para el destino*/
 assign alu_src_o = control_values_r[9]; /*Viene de segunda salida 0(rd) de register o viene de inmediato*/

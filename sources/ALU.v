@@ -35,7 +35,8 @@ localparam SLL = 4'b0010;
 localparam SRL = 4'b0100;
 localparam AND = 4'b0110;
 localparam NOR = 4'b0111;
-   
+  
+//Se hace switch case para realizar operaciones segun sea necesario  
    always @ (a_i or b_i or alu_operation_i or shamt)
      begin
 		case (alu_operation_i)

@@ -41,13 +41,6 @@ module MIPS_Processor
 // Data types to connect modules
 
 
-// Added Values
-wire mem_read_w;
-wire mem_write_w;
-wire mem_to_reg_w;
-wire [31:0] read_data_out_w;
-wire [31:0] read_data_or_alu_result_w;
-
 //
 
 wire reg_dst_w;
@@ -58,7 +51,6 @@ wire [2:0] alu_op_w;
 wire [3:0] alu_operation_w;
 wire [4:0] write_register_w;
 wire [4:0] i_or_r_write_register_w;
-
 wire [31:0] pc_w;
 wire [31:0] instruction_w;
 wire [31:0] read_data_1_w;
@@ -67,6 +59,14 @@ wire [31:0] inmmediate_extend_w;
 wire [31:0] read_ata_2_r_nmmediate_w;
 wire [31:0] alu_result_w;
 wire [31:0] pc_plus_4_w;
+
+// Wires agregados para conectar componentes que no
+// existian o que no estaban conectados
+wire mem_read_w;
+wire mem_write_w;
+wire mem_to_reg_w;
+wire [31:0] read_data_out_w;
+wire [31:0] read_data_or_alu_result_w;
 wire [31:0] shift_branch_w;
 wire [31:0] pc_branch_w;
 wire [31:0] new_pc_w;
@@ -77,7 +77,6 @@ wire branch_ne_w;
 wire jump_w;
 wire jr_w;
 wire [27:0] instruction_jump_shift_w;
-
 wire [31:0] write_data_w;
 
 
@@ -101,10 +100,10 @@ CONTROL_UNIT
 	.alu_op_o(alu_op_w),
 	.alu_src_o(alu_rc_w),
 	.reg_write_o(reg_write_w),
-	.mem_read_o(mem_read_w),
-	.mem_to_reg_o(mem_to_reg_w),
-	.mem_write_o(mem_write_w),
-	.jump_o(jump_w)
+	.mem_read_o(mem_read_w),// bandera para cuando se lee de memoria
+	.mem_to_reg_o(mem_to_reg_w),//bandera para cuando se escribe de memoria en registro
+	.mem_write_o(mem_write_w),//bandera para cuando se escribe de memoria
+	.jump_o(jump_w)//bandera para indicar cuando se hace un j o jal.
 );
 
 Program_Counter
@@ -138,7 +137,8 @@ PC_Puls_4
 	.result_o(pc_plus_4_w)
 );
 
-//*********************************** Jump
+//Instancia shift left para determinar el salto de branch
+//Recibe intradas de Sign Extend
  Shift_Left_2 
  BRANCH_ADDRESS_SHIFT_LEFT
 (   
@@ -147,7 +147,7 @@ PC_Puls_4
 
 );
 
-
+//Se crea sumador para sumar el pc+4 y el salto requerido del branch.
 Adder
 PC_ADD_BRANCH
 (
@@ -157,7 +157,8 @@ PC_ADD_BRANCH
 	.result_o(pc_branch_w)
 );
 
-
+//Multiplexor para elegir entre el pc+4 o salto de branch
+//Se agregan compuertas logicas para beq o bne y realizar salto 
 Multiplexer_2_to_1
 #(
 	.N_BITS(32)
@@ -172,11 +173,13 @@ MUX_PC_OR_BRANCH
 
 );
  
-//NEW CODE DONE FOR JUMP
+//
 
-//Shift left realizado de esta manera debido a que su tamaño no es de 32 bits
+//Shift left para agregar 2 bits a la derecha 
+//para reflejar que es una diferencia de 4 entre una direccion y la siguiente
 assign instruction_jump_shift_w = instruction_w[25:0]<<2;
 
+//Multiplexor para elegir entre jump o pc+4/branch
 Multiplexer_2_to_1
 #(
 	.N_BITS(32)
@@ -190,7 +193,7 @@ MUX_JUMP_OR_PC
 
 );
 
-//Multiplexer to choose between previous PC result or JR value
+//Multiplexor para elegir entre jr o branch/jump/branch
 Multiplexer_2_to_1
 #(
 	.N_BITS(32)
@@ -226,8 +229,8 @@ MUX_R_TYPE_OR_I_Type
 );
 
 
-/// Multiplexor to choose between MUX R_TYPE_OR_I_TYPE and register 31 (ra)
-
+/// Multiplexor para elegir entre MUX R_TYPE_OR_I_TYPE y registro 31 (ra)
+//Va conectado al reg file
 
 Multiplexer_2_to_1
 #(
@@ -287,7 +290,7 @@ MUX_READ_DATA_2_OR_IMMEDIATE
 	.mux_o(read_ata_2_r_nmmediate_w)
 
 );
-
+//Se agrega bandera de jr
 
 ALU_Control
 ALU_CTRL
@@ -300,7 +303,7 @@ ALU_CTRL
 );
 
 
-
+//Se agrega shamt
 ALU
 ALU_UNIT
 (
@@ -312,7 +315,7 @@ ALU_UNIT
 	.alu_data_o(alu_result_w)
 );
 
-
+//Se instancia Data Memory para que sea nuestra RAM
 Data_Memory 
 #
 (
@@ -327,7 +330,8 @@ RAM
 	.clk(clk),
 	.data_o(read_data_out_w)
 );
-
+//Mux ubicado en salida de Data Memory para elegir 
+//entre dato salido de memoria o ALU 
 Multiplexer_2_to_1
 #(
 	.N_BITS(32)
@@ -342,8 +346,8 @@ MUX_MEM_TO_REG_READ_DATA_OR_ALU_RESULT
 
 );
 
-//MUX to pick between MUX_MEM_TO_REG_READ_DATA_OR_ALU_RESULT and PC+4. This is for the jal instruction
-
+//MUX para elegir entre MUX_MEM_TO_REG_READ_DATA_OR_ALU_RESULT y PC+4 
+//Se usa en jal para escribir registra ra en reg file.
 Multiplexer_2_to_1
 #(
 	.N_BITS(32)

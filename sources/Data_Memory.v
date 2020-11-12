@@ -28,7 +28,9 @@ module Data_Memory
 	wire [DATA_WIDTH-1:0] read_data_aux;
 	wire [DATA_WIDTH-1:0] real_address;
 	
-	//assign real_address = (address_i-32'h10010000)>>2;
+	//Se hace mapeo de direccion de memoria logica a real
+	//Tomando en cuenta solo 8 bits de la logica importan porque la longitud de memoria
+	// real es de 256
 	assign real_address = {22'b 0,address_i[9:0]}>>2;
 
 	always @ (posedge clk)

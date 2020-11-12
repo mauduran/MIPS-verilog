@@ -24,7 +24,7 @@ module Program_Counter
 	
 	output reg [N_BITS-1:0] pc_value_o
 );
-
+//se agrega 400_000 como valor inicial del pc.
 always@(negedge reset or posedge clk) begin
 	if(reset==0)
 		pc_value_o <= 32'h400000;

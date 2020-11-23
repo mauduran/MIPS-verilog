@@ -86,15 +86,45 @@ wire [31:0] write_data_w;
 wire [31:0] ID_instr_w;
 wire [31:0] ID_pc_4_w;
 
-
-
-
-
-
-
-
 //***************************WIRES FOR ID/EX************************/
 
+
+
+
+
+//Wires Control Unit
+wire EX_reg_dst_w;			//
+wire EX_branch_ne_w;			//
+wire EX_branch_eq_w;			//
+wire [2:0] EX_alu_op_w;		//
+wire EX_alu_src_w;			//
+wire EX_reg_write_w;
+wire EX_mem_read_w;
+wire EX_mem_to_reg_w;
+wire EX_mem_write_w;
+wire EX_jump_w;
+
+//Total 13 bits
+
+//Wires Register Fil
+wire [31:0] EX_read_data_1_w;
+wire [31:0] EX_read_data_2_w;
+
+//Total 64 bits
+
+
+// Wire for sign extend
+wire [31:0] EX_immediate_extend_w;
+//Total 32 bits
+
+
+
+
+// Wires coming from previous stage
+
+wire [31:0] EX_instr_w;
+wire [31:0] EX_pc_4_w;
+//Total 64 bits
 
 
 
@@ -124,9 +154,29 @@ IF_ID_PIPELINE
 (
 	.clk(clk),
 	.reset(reset),
-	.dataIn({pc_plus_4_w,instruction_w})
+	.dataIn({pc_plus_4_w,instruction_w}),
 	.dataOut({ID_pc_4_w,ID_instr_w})
+);
+
+
+Pipeline_Register
+#
+(
+	.N(173)
 )
+ID_EX_PIPELINE
+(
+	.clk(clk),
+	.reset(reset),
+	.dataIn({ reg_dst_w, branch_ne_w, branch_eq_w, alu_op_w, alu_rc_w, reg_write_w,
+		mem_read_w, mem_to_reg_w, mem_write_w, jump_w, read_data_1_w,
+		read_data_2_w, inmmediate_extend_w, ID_pc_4_w, instruction_w
+	}),	
+	.dataOut({EX_reg_dst_w, EX_branch_ne_w, EX_branch_eq_w,EX_alu_op_w, 
+		EX_alu_src_w, EX_reg_write_w, EX_mem_read_w, EX_mem_to_reg_w, EX_mem_write_w, 
+		EX_jump_w, EX_read_data_1_w, EX_read_data_2_w, EX_immediate_extend_w, 
+		EX_pc_4_w, EX_instr_w})
+);
 
 
 Control
@@ -181,7 +231,7 @@ PC_Puls_4
  Shift_Left_2 
  BRANCH_ADDRESS_SHIFT_LEFT
 (   
-  .data_i(inmmediate_extend_w),
+  .data_i(EX_immediate_extend_w),
   .data_o(shift_branch_w)
 
 );
@@ -190,7 +240,7 @@ PC_Puls_4
 Adder
 PC_ADD_BRANCH
 (
-	.data_0_i(pc_plus_4_w),
+	.data_0_i(EX_pc_4_w),
 	.data_1_i(shift_branch_w),
 	
 	.result_o(pc_branch_w)
@@ -204,8 +254,8 @@ Multiplexer_2_to_1
 )
 MUX_PC_OR_BRANCH
 (
-	.selector_i((zero_w & branch_eq_w) | (~zero_w & branch_ne_w)),
-	.data_0_i(pc_plus_4_w),
+	.selector_i((zero_w & EX_branch_eq_w) | (~zero_w & EX_branch_ne_w)),
+	.data_0_i(EX_pc_4_w),
 	.data_1_i(pc_branch_w),
 	
 	.mux_o(pc_or_branch_w)
@@ -216,7 +266,7 @@ MUX_PC_OR_BRANCH
 
 //Shift left para agregar 2 bits a la derecha 
 //para reflejar que es una diferencia de 4 entre una direccion y la siguiente
-assign instruction_jump_shift_w = ID_instr_w[25:0]<<2;
+assign instruction_jump_shift_w = EX_instr_w[25:0]<<2;
 
 //Multiplexor para elegir entre jump o pc+4/branch
 Multiplexer_2_to_1
@@ -225,7 +275,7 @@ Multiplexer_2_to_1
 )
 MUX_JUMP_OR_PC
 (
-	.selector_i(jump_w),
+	.selector_i(EX_jump_w),
 	.data_0_i(pc_or_branch_w),
 	.data_1_i({pc_plus_4_w[31:28],instruction_jump_shift_w}),
 	.mux_o(pc_branch_or_jump_w)
@@ -241,7 +291,7 @@ MUX_BranchPCJump_Or_Jr
 (
 	.selector_i(jr_w),
 	.data_0_i(pc_branch_or_jump_w),
-	.data_1_i(read_data_1_w),
+	.data_1_i(EX_read_data_1_w),
 	.mux_o(new_pc_w)
 );
 
@@ -322,9 +372,9 @@ Multiplexer_2_to_1
 )
 MUX_READ_DATA_2_OR_IMMEDIATE
 (
-	.selector_i(alu_rc_w),
-	.data_0_i(read_data_2_w),
-	.data_1_i(inmmediate_extend_w),
+	.selector_i(EX_alu_src_w),
+	.data_0_i(EX_read_data_2_w),
+	.data_1_i(EX_immediate_extend_w),
 	
 	.mux_o(read_ata_2_r_nmmediate_w)
 
@@ -334,8 +384,8 @@ MUX_READ_DATA_2_OR_IMMEDIATE
 ALU_Control
 ALU_CTRL
 (
-	.alu_op_i(alu_op_w),
-	.alu_function_i(instruction_w[5:0]),
+	.alu_op_i(EX_alu_op_w),
+	.alu_function_i(EX_instr_w[5:0]),
 	.alu_operation_o(alu_operation_w),
 	.jr_o(jr_w)
 
@@ -347,9 +397,9 @@ ALU
 ALU_UNIT
 (
 	.alu_operation_i(alu_operation_w),
-	.a_i(read_data_1_w),
+	.a_i(EX_read_data_2_w),
 	.b_i(read_ata_2_r_nmmediate_w),
-	.shamt(instruction_w[10:6]), /*Added shamt to ALU unit */
+	.shamt(EX_instr_w[10:6]), /*Added shamt to ALU unit */
 	.zero_o(zero_w),
 	.alu_data_o(alu_result_w)
 );

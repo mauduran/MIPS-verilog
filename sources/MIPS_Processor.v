@@ -79,9 +79,32 @@ wire jr_w;
 wire [27:0] instruction_jump_shift_w;
 wire [31:0] write_data_w;
 
+//***************************PIPELINE******************************/
+
+
+//***************************WIRES FOR IF/ID************************/
+wire [31:0] ID_instr_w;
+wire [31:0] ID_pc_4_w;
 
 
 
+
+
+
+
+
+//***************************WIRES FOR ID/EX************************/
+
+
+
+
+
+//***************************WIRES FOR EX/MEM************************/
+
+
+
+
+//***************************WIRES FOR MEM/WB************************/
 
 
 
@@ -90,10 +113,26 @@ wire [31:0] write_data_w;
 //******************************************************************/
 //******************************************************************/
 //******************************************************************/
+
+//*******************PIPELINE REG IF/ID ***************************/
+Pipeline_Register
+#
+(
+	.N(64)
+)
+IF_ID_PIPELINE
+(
+	.clk(clk),
+	.reset(reset),
+	.dataIn({pc_plus_4_w,instruction_w})
+	.dataOut({ID_pc_4_w,ID_instr_w})
+)
+
+
 Control
 CONTROL_UNIT
 (
-	.opcode_i(instruction_w[31:26]),
+	.opcode_i(ID_instr_w[31:26]),
 	.reg_dst_o(reg_dst_w),
 	.branch_ne_o(branch_ne_w),
 	.branch_eq_o(branch_eq_w),
@@ -177,7 +216,7 @@ MUX_PC_OR_BRANCH
 
 //Shift left para agregar 2 bits a la derecha 
 //para reflejar que es una diferencia de 4 entre una direccion y la siguiente
-assign instruction_jump_shift_w = instruction_w[25:0]<<2;
+assign instruction_jump_shift_w = ID_instr_w[25:0]<<2;
 
 //Multiplexor para elegir entre jump o pc+4/branch
 Multiplexer_2_to_1
@@ -254,8 +293,8 @@ REGISTER_FILE_UNIT
 	.reset(reset),
 	.reg_write_i(reg_write_w),
 	.write_register_i(write_register_w),
-	.read_register_1_i(instruction_w[25:21]),
-	.read_register_2_i(instruction_w[20:16]),
+	.read_register_1_i(ID_instr_w[25:21]),
+	.read_register_2_i(ID_instr_w[20:16]),
 	.write_data_i(write_data_w),
 	.read_data_1_o(read_data_1_w),
 	.read_data_2_o(read_data_2_w)
@@ -271,7 +310,7 @@ REGISTER_FILE_UNIT
 Sign_Extend
 SIGNED_EXTEND_FOR_CONSTANTS
 (   
-	.data_i(instruction_w[15:0]),
+	.data_i(ID_instr_w[15:0]),
    .sign_extend_o(inmmediate_extend_w)
 );
 

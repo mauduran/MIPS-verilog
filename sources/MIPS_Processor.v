@@ -88,10 +88,6 @@ wire [31:0] ID_pc_4_w;
 
 //***************************WIRES FOR ID/EX************************/
 
-
-
-
-
 //Wires Control Unit
 wire EX_reg_dst_w;			//
 wire EX_branch_ne_w;			//
@@ -117,22 +113,36 @@ wire [31:0] EX_read_data_2_w;
 wire [31:0] EX_immediate_extend_w;
 //Total 32 bits
 
-
-
-
 // Wires coming from previous stage
 
 wire [31:0] EX_instr_w;
 wire [31:0] EX_pc_4_w;
 //Total 64 bits
 
-
-
-
 //***************************WIRES FOR EX/MEM************************/
+//Control_Unit
+wire MEM_reg_dst_w;					
+wire MEM_reg_write_w;
+wire MEM_mem_read_w;
+wire MEM_mem_to_reg_w;
+wire MEM_mem_write_w;
+wire MEM_jump_w;
 
+//total 6//
 
+//Wire salida ALU
+wire [31:0]MEM_alu_result;
 
+//Wire Reg file
+wire [31:0]MEM_read_data_2_w;
+
+//Wire PC
+wire [31:00]MEM_pc_4_w;
+
+//Wire instr
+wire [31:0] MEM_instr_w;
+
+////TOTAL 134/////
 
 //***************************WIRES FOR MEM/WB************************/
 
@@ -158,7 +168,7 @@ IF_ID_PIPELINE
 	.dataOut({ID_pc_4_w,ID_instr_w})
 );
 
-
+////ID/EX
 Pipeline_Register
 #
 (
@@ -176,6 +186,21 @@ ID_EX_PIPELINE
 		EX_alu_src_w, EX_reg_write_w, EX_mem_read_w, EX_mem_to_reg_w, EX_mem_write_w, 
 		EX_jump_w, EX_read_data_1_w, EX_read_data_2_w, EX_immediate_extend_w, 
 		EX_pc_4_w, EX_instr_w})
+);
+////EX/MEM
+Pipeline_Register
+#
+(
+	.N(134)
+)
+EX_MEM_PIPELINE
+(
+	.clk(clk),
+	.reset(reset),
+	.dataIn({EX_reg_dst_w,EX_reg_write_w, EX_mem_read_w, EX_mem_to_reg_w, EX_mem_write_w, 
+		EX_jump_w,alu_result_w,EX_read_data_2_w,new_pc_w,EX_instr_w}),	
+	.dataOut({MEM_reg_dst_w,MEM_reg_write_w,MEM_mem_read_w, MEM_mem_to_reg_w, MEM_mem_write_w, 
+				 MEM_jump_w, MEM_alu_result, MEM_read_data_2_w, MEM_pc_4_w, MEM_instr_w})
 );
 
 
@@ -200,7 +225,7 @@ PC
 (
 	.clk(clk),
 	.reset(reset),
-	.new_pc_i(new_pc_w),
+	.new_pc_i(MEM_pc_4_w),
 	.pc_value_o(pc_w)
 );
 
@@ -412,10 +437,10 @@ Data_Memory
 )
 RAM
 (
-	.write_data_i(read_data_2_w),
-	.address_i(alu_result_w),
-	.mem_write_i(mem_write_w),
-	.mem_read_i(mem_read_w),
+	.write_data_i(MEM_read_data_2_w),
+	.address_i(MEM_alu_result_w),
+	.mem_write_i(MEM_mem_write_w),
+	.mem_read_i(MEM_mem_read_w),
 	.clk(clk),
 	.data_o(read_data_out_w)
 );

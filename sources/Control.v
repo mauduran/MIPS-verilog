@@ -49,7 +49,7 @@ always@(opcode_i) begin
 	
 		R_TYPE     :  control_values_r = 12'b0_1_001_00_00_111;
 		I_TYPE_ADDI:  control_values_r = 12'b0_0_101_00_00_100;
-		I_TYPE_LUI:	  control_values_r = 12'b0_0_101_00_00_000;
+		I_TYPE_LUI:	  control_values_r = 12'b0_0_101_00_00_110;
 		I_TYPE_ORI:	  control_values_r = 12'b0_0_101_00_00_001;
 		I_TYPE_ANDI:  control_values_r = 12'b0_0_101_00_00_010;
 		//alu_op de lw y sw pueden ser lo mismo que el ADDI 

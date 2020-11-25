@@ -136,11 +136,12 @@ wire MEM_jump_w;
 wire MEM_jr_w;
 
 //Wire salida ALU
-wire [31:0]MEM_alu_result;
+wire [31:0]MEM_alu_result_w;
 wire MEM_zero_w;
 
 
 //Wire Reg file
+wire [31:0]MEM_read_data_1_w;
 wire [31:0]MEM_read_data_2_w;
 
 //Wire PC
@@ -164,7 +165,7 @@ wire WB_jump_w;
 wire [31:0] WB_read_data_w;
 
 //ALU
-wire [31:0] WB_alu_result;
+wire [31:0] WB_alu_result_w;
 
 //Instruction
 wire [31:0] WB_instr_w;
@@ -205,7 +206,7 @@ ID_EX_PIPELINE
 	.reset(reset),
 	.dataIn({ reg_dst_w, branch_ne_w, branch_eq_w, alu_op_w, alu_rc_w, reg_write_w,
 		mem_read_w, mem_to_reg_w, mem_write_w, jump_w, read_data_1_w,
-		read_data_2_w, inmmediate_extend_w, ID_pc_4_w, instruction_w
+		read_data_2_w, inmmediate_extend_w, ID_pc_4_w, ID_instr_w
 	}),	
 	.dataOut({EX_reg_dst_w, EX_branch_ne_w, EX_branch_eq_w,EX_alu_op_w, 
 		EX_alu_src_w, EX_reg_write_w, EX_mem_read_w, EX_mem_to_reg_w, EX_mem_write_w, 
@@ -217,16 +218,16 @@ ID_EX_PIPELINE
 Pipeline_Register
 #
 (
-	.N(170)
+	.N(202)
 )
 EX_MEM_PIPELINE
 (
 	.clk(clk),
 	.reset(reset),
-	.dataIn({jr_w, EX_reg_dst_w,EX_branch_ne_w, EX_branch_eq_w, EX_reg_write_w, EX_mem_read_w, EX_mem_to_reg_w, EX_mem_write_w, 
-		EX_jump_w,alu_result_w,zero_w,EX_read_data_2_w,new_pc_w,EX_instr_w,pc_branch_w }),	
-	.dataOut({MEM_jr_w, MEM_reg_dst_w, MEM_branch_ne_w, MEM_branch_eq_w,MEM_reg_write_w,MEM_mem_read_w, MEM_mem_to_reg_w, MEM_mem_write_w, 
-				 MEM_jump_w, MEM_alu_result,MEM_zero_w, MEM_read_data_2_w, MEM_pc_4_w, MEM_instr_w, MEM_pc_branch_w})
+	.dataIn({EX_read_data_1_w, jr_w, EX_reg_dst_w,EX_branch_ne_w, EX_branch_eq_w, EX_reg_write_w, EX_mem_read_w, EX_mem_to_reg_w, EX_mem_write_w, 
+		EX_jump_w,alu_result_w,zero_w,EX_read_data_2_w,EX_pc_4_w,EX_instr_w,pc_branch_w }),	
+	.dataOut({MEM_read_data_1_w, MEM_jr_w, MEM_reg_dst_w, MEM_branch_ne_w, MEM_branch_eq_w,MEM_reg_write_w,MEM_mem_read_w, MEM_mem_to_reg_w, MEM_mem_write_w, 
+				 MEM_jump_w, MEM_alu_result_w,MEM_zero_w, MEM_read_data_2_w, MEM_pc_4_w, MEM_instr_w, MEM_pc_branch_w})
 );
 
 
@@ -240,7 +241,7 @@ MEM_WB_PIPELINE
 (
 	.clk(clk),
 	.reset(reset),
-	.dataIn({MEM_reg_dst_w, MEM_reg_write_w, MEM_mem_to_reg_w, MEM_jump_w, MEM_alu_result, read_data_out_w, MEM_pc_4_w , MEM_instr_w}),	
+	.dataIn({MEM_reg_dst_w, MEM_reg_write_w, MEM_mem_to_reg_w, MEM_jump_w, MEM_alu_result_w, read_data_out_w, MEM_pc_4_w , MEM_instr_w}),	
 	.dataOut({WB_reg_dst_w, WB_reg_write_w, WB_mem_to_reg_w, WB_jump_w, WB_alu_result_w,WB_read_data_w, WB_pc_4_w, WB_instr_w})
 );
 
@@ -266,7 +267,7 @@ PC
 (
 	.clk(clk),
 	.reset(reset),
-	.new_pc_i(MEM_pc_4_w),
+	.new_pc_i(new_pc_w),
 	.pc_value_o(pc_w)
 );
 
@@ -321,7 +322,7 @@ Multiplexer_2_to_1
 MUX_PC_OR_BRANCH
 (
 	.selector_i((MEM_zero_w & MEM_branch_eq_w) | (~MEM_zero_w & MEM_branch_ne_w)),
-	.data_0_i(MEM_pc_4_w),
+	.data_0_i(pc_plus_4_w),
 	.data_1_i(MEM_pc_branch_w),
 	
 	.mux_o(pc_or_branch_w)
@@ -463,7 +464,7 @@ ALU
 ALU_UNIT
 (
 	.alu_operation_i(alu_operation_w),
-	.a_i(EX_read_data_2_w),
+	.a_i(EX_read_data_1_w),
 	.b_i(read_ata_2_r_nmmediate_w),
 	.shamt(EX_instr_w[10:6]), /*Added shamt to ALU unit */
 	.zero_o(zero_w),

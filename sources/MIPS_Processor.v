@@ -133,7 +133,7 @@ wire MEM_jump_w;
 //total 8//
 
 //Wire salida ALU COntrol
-wire MEM_jr_w
+wire MEM_jr_w;
 
 //Wire salida ALU
 wire [31:0]MEM_alu_result;
@@ -376,8 +376,8 @@ Multiplexer_2_to_1
 MUX_R_TYPE_OR_I_Type
 (
 	.selector_i(WB_reg_dst_w),
-	.data_0_i(WB_instruction_w[20:16]),
-	.data_1_i(WB_instruction_w[15:11]),
+	.data_0_i(WB_instr_w[20:16]),
+	.data_1_i(WB_instr_w[15:11]),
 	
 	.mux_o(i_or_r_write_register_w)
 

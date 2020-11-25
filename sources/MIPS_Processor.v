@@ -132,6 +132,9 @@ wire MEM_jump_w;
 
 //total 8//
 
+//Wire salida ALU COntrol
+wire MEM_jr_w
+
 //Wire salida ALU
 wire [31:0]MEM_alu_result;
 wire MEM_zero_w;
@@ -147,10 +150,27 @@ wire [31:00]MEM_pc_branch_w;
 //Wire instr
 wire [31:0] MEM_instr_w;
 
-////TOTAL 169/////
+////TOTAL 170/////
 
 //***************************WIRES FOR MEM/WB************************/
 
+//Wires control unit
+wire WB_reg_dst_w;					
+wire WB_reg_write_w;
+wire WB_mem_to_reg_w;
+wire WB_jump_w;
+
+//Wires Data Memory
+wire [31:0] WB_read_data_w;
+
+//ALU
+wire [31:0] WB_alu_result;
+
+//Instruction
+wire [31:0] WB_instr_w;
+
+//Wire PC
+wire [31:0] WB_pc_4_w;
 
 
 //******************************************************************/
@@ -197,16 +217,31 @@ ID_EX_PIPELINE
 Pipeline_Register
 #
 (
-	.N(169)
+	.N(170)
 )
 EX_MEM_PIPELINE
 (
 	.clk(clk),
 	.reset(reset),
-	.dataIn({EX_reg_dst_w,EX_branch_ne_w, EX_branch_eq_w, EX_reg_write_w, EX_mem_read_w, EX_mem_to_reg_w, EX_mem_write_w, 
+	.dataIn({jr_w, EX_reg_dst_w,EX_branch_ne_w, EX_branch_eq_w, EX_reg_write_w, EX_mem_read_w, EX_mem_to_reg_w, EX_mem_write_w, 
 		EX_jump_w,alu_result_w,zero_w,EX_read_data_2_w,new_pc_w,EX_instr_w,pc_branch_w }),	
-	.dataOut({MEM_reg_dst_w, MEM_branch_ne_w, MEM_branch_eq_w,MEM_reg_write_w,MEM_mem_read_w, MEM_mem_to_reg_w, MEM_mem_write_w, 
+	.dataOut({MEM_jr_w, MEM_reg_dst_w, MEM_branch_ne_w, MEM_branch_eq_w,MEM_reg_write_w,MEM_mem_read_w, MEM_mem_to_reg_w, MEM_mem_write_w, 
 				 MEM_jump_w, MEM_alu_result,MEM_zero_w, MEM_read_data_2_w, MEM_pc_4_w, MEM_instr_w, MEM_pc_branch_w})
+);
+
+
+/////MEM/WB
+Pipeline_Register
+#
+(
+	.N(132)
+)
+MEM_WB_PIPELINE
+(
+	.clk(clk),
+	.reset(reset),
+	.dataIn({MEM_reg_dst_w, MEM_reg_write_w, MEM_mem_to_reg_w, MEM_jump_w, MEM_alu_result, read_data_out_w, MEM_pc_4_w , MEM_instr_w}),	
+	.dataOut({WB_reg_dst_w, WB_reg_write_w, WB_mem_to_reg_w, WB_jump_w, WB_alu_result_w, WB_pc_4_w, WB_instr_w})
 );
 
 
@@ -257,7 +292,7 @@ PC_Puls_4
 	.result_o(pc_plus_4_w)
 );
 
-//Instancia shift left para determinar el salto de branch
+//Instancia  left para determinar el salto de branch
 //Recibe intradas de Sign Extend
  Shift_Left_2 
  BRANCH_ADDRESS_SHIFT_LEFT
@@ -297,7 +332,7 @@ MUX_PC_OR_BRANCH
 
 //Shift left para agregar 2 bits a la derecha 
 //para reflejar que es una diferencia de 4 entre una direccion y la siguiente
-assign instruction_jump_shift_w = EX_instr_w[25:0]<<2;
+assign instruction_jump_shift_w = MEM_instr_w[25:0]<<2;
 
 //Multiplexor para elegir entre jump o pc+4/branch
 Multiplexer_2_to_1
@@ -306,9 +341,9 @@ Multiplexer_2_to_1
 )
 MUX_JUMP_OR_PC
 (
-	.selector_i(EX_jump_w),
+	.selector_i(MEM_jump_w),
 	.data_0_i(pc_or_branch_w),
-	.data_1_i({pc_plus_4_w[31:28],instruction_jump_shift_w}),
+	.data_1_i({MEM_pc_4_w[31:28],instruction_jump_shift_w}),
 	.mux_o(pc_branch_or_jump_w)
 
 );
@@ -320,9 +355,9 @@ Multiplexer_2_to_1
 )
 MUX_BranchPCJump_Or_Jr
 (
-	.selector_i(jr_w),
+	.selector_i(MEM_jr_w),
 	.data_0_i(pc_branch_or_jump_w),
-	.data_1_i(EX_read_data_1_w),
+	.data_1_i(MEM_read_data_1_w),
 	.mux_o(new_pc_w)
 );
 
@@ -340,9 +375,9 @@ Multiplexer_2_to_1
 )
 MUX_R_TYPE_OR_I_Type
 (
-	.selector_i(reg_dst_w),
-	.data_0_i(instruction_w[20:16]),
-	.data_1_i(instruction_w[15:11]),
+	.selector_i(WB_reg_dst_w),
+	.data_0_i(WB_instruction_w[20:16]),
+	.data_1_i(WB_instruction_w[15:11]),
 	
 	.mux_o(i_or_r_write_register_w)
 
@@ -358,7 +393,7 @@ Multiplexer_2_to_1
 )
 MUX_Instruction_Type_OR_ra
 (
-	.selector_i(jump_w),
+	.selector_i(WB_jump_w),
 	.data_0_i(i_or_r_write_register_w),
 	.data_1_i(5'b11111),
 	
@@ -458,9 +493,9 @@ Multiplexer_2_to_1
 )
 MUX_MEM_TO_REG_READ_DATA_OR_ALU_RESULT
 (
-	.selector_i(mem_to_reg_w),
-	.data_0_i(alu_result_w),
-	.data_1_i(read_data_out_w),
+	.selector_i(WB_mem_to_reg_w),
+	.data_0_i(WB_alu_result_w),
+	.data_1_i(WB_read_data_w),
 	
 	.mux_o(read_data_or_alu_result_w)
 
@@ -474,9 +509,9 @@ Multiplexer_2_to_1
 )
 MUX_PCplus4_OR_MUX_MemOrALUres
 (
-	.selector_i(jump_w),
+	.selector_i(WB_jump_w),
 	.data_0_i(read_data_or_alu_result_w),
-	.data_1_i(pc_plus_4_w),
+	.data_1_i(WB_pc_4_w),
 	.mux_o(write_data_w)
 
 );

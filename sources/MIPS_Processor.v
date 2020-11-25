@@ -100,7 +100,7 @@ wire EX_mem_to_reg_w;
 wire EX_mem_write_w;
 wire EX_jump_w;
 
-//Total 13 bits
+//Total 12 bits
 
 //Wires Register Fil
 wire [31:0] EX_read_data_1_w;
@@ -197,7 +197,7 @@ IF_ID_PIPELINE
 Pipeline_Register
 #
 (
-	.N(173)
+	.N(172)
 )
 ID_EX_PIPELINE
 (
@@ -241,7 +241,7 @@ MEM_WB_PIPELINE
 	.clk(clk),
 	.reset(reset),
 	.dataIn({MEM_reg_dst_w, MEM_reg_write_w, MEM_mem_to_reg_w, MEM_jump_w, MEM_alu_result, read_data_out_w, MEM_pc_4_w , MEM_instr_w}),	
-	.dataOut({WB_reg_dst_w, WB_reg_write_w, WB_mem_to_reg_w, WB_jump_w, WB_alu_result_w, WB_pc_4_w, WB_instr_w})
+	.dataOut({WB_reg_dst_w, WB_reg_write_w, WB_mem_to_reg_w, WB_jump_w, WB_alu_result_w,WB_read_data_w, WB_pc_4_w, WB_instr_w})
 );
 
 

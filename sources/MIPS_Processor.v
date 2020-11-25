@@ -121,6 +121,8 @@ wire [31:0] EX_pc_4_w;
 
 //***************************WIRES FOR EX/MEM************************/
 //Control_Unit
+wire MEM_branch_ne_w;			//
+wire MEM_branch_eq_w;
 wire MEM_reg_dst_w;					
 wire MEM_reg_write_w;
 wire MEM_mem_read_w;
@@ -128,21 +130,24 @@ wire MEM_mem_to_reg_w;
 wire MEM_mem_write_w;
 wire MEM_jump_w;
 
-//total 6//
+//total 8//
 
 //Wire salida ALU
 wire [31:0]MEM_alu_result;
+wire MEM_zero_w;
+
 
 //Wire Reg file
 wire [31:0]MEM_read_data_2_w;
 
 //Wire PC
 wire [31:00]MEM_pc_4_w;
+wire [31:00]MEM_pc_branch_w;
 
 //Wire instr
 wire [31:0] MEM_instr_w;
 
-////TOTAL 134/////
+////TOTAL 169/////
 
 //***************************WIRES FOR MEM/WB************************/
 
@@ -187,20 +192,21 @@ ID_EX_PIPELINE
 		EX_jump_w, EX_read_data_1_w, EX_read_data_2_w, EX_immediate_extend_w, 
 		EX_pc_4_w, EX_instr_w})
 );
+
 ////EX/MEM
 Pipeline_Register
 #
 (
-	.N(134)
+	.N(169)
 )
 EX_MEM_PIPELINE
 (
 	.clk(clk),
 	.reset(reset),
-	.dataIn({EX_reg_dst_w,EX_reg_write_w, EX_mem_read_w, EX_mem_to_reg_w, EX_mem_write_w, 
-		EX_jump_w,alu_result_w,EX_read_data_2_w,new_pc_w,EX_instr_w}),	
-	.dataOut({MEM_reg_dst_w,MEM_reg_write_w,MEM_mem_read_w, MEM_mem_to_reg_w, MEM_mem_write_w, 
-				 MEM_jump_w, MEM_alu_result, MEM_read_data_2_w, MEM_pc_4_w, MEM_instr_w})
+	.dataIn({EX_reg_dst_w,EX_branch_ne_w, EX_branch_eq_w, EX_reg_write_w, EX_mem_read_w, EX_mem_to_reg_w, EX_mem_write_w, 
+		EX_jump_w,alu_result_w,zero_w,EX_read_data_2_w,new_pc_w,EX_instr_w,pc_branch_w }),	
+	.dataOut({MEM_reg_dst_w, MEM_branch_ne_w, MEM_branch_eq_w,MEM_reg_write_w,MEM_mem_read_w, MEM_mem_to_reg_w, MEM_mem_write_w, 
+				 MEM_jump_w, MEM_alu_result,MEM_zero_w, MEM_read_data_2_w, MEM_pc_4_w, MEM_instr_w, MEM_pc_branch_w})
 );
 
 
@@ -279,9 +285,9 @@ Multiplexer_2_to_1
 )
 MUX_PC_OR_BRANCH
 (
-	.selector_i((zero_w & EX_branch_eq_w) | (~zero_w & EX_branch_ne_w)),
-	.data_0_i(EX_pc_4_w),
-	.data_1_i(pc_branch_w),
+	.selector_i((MEM_zero_w & MEM_branch_eq_w) | (~MEM_zero_w & MEM_branch_ne_w)),
+	.data_0_i(MEM_pc_4_w),
+	.data_1_i(MEM_pc_branch_w),
 	
 	.mux_o(pc_or_branch_w)
 

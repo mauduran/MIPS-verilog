@@ -408,7 +408,7 @@ REGISTER_FILE_UNIT
 (
 	.clk(clk),
 	.reset(reset),
-	.reg_write_i(reg_write_w),
+	.reg_write_i(WB_reg_write_w),
 	.write_register_i(write_register_w),
 	.read_register_1_i(ID_instr_w[25:21]),
 	.read_register_2_i(ID_instr_w[20:16]),

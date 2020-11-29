@@ -174,6 +174,11 @@ wire [31:0] WB_instr_w;
 wire [31:0] WB_pc_4_w;
 
 
+//Forwarding Unit
+wire [1:0] forward_A_sel_w;
+wire [1:0] forward_B_sel_w;
+wire [31:0] ALU_input_A_w;
+wire [31:0] ALU_input_B_w;
 //******************************************************************/
 //******************************************************************/
 //******************************************************************/
@@ -188,6 +193,7 @@ Pipeline_Register
 )
 IF_ID_PIPELINE
 (
+	.enable(1'b1),
 	.clk(clk),
 	.reset(reset),
 	.dataIn({pc_plus_4_w,instruction_w}),
@@ -202,6 +208,7 @@ Pipeline_Register
 )
 ID_EX_PIPELINE
 (
+	.enable(1'b1),
 	.clk(clk),
 	.reset(reset),
 	.dataIn({ reg_dst_w, branch_ne_w, branch_eq_w, alu_op_w, alu_rc_w, reg_write_w,
@@ -222,6 +229,7 @@ Pipeline_Register
 )
 EX_MEM_PIPELINE
 (
+	.enable(1'b1),
 	.clk(clk),
 	.reset(reset),
 	.dataIn({EX_read_data_1_w, jr_w, EX_reg_dst_w,EX_branch_ne_w, EX_branch_eq_w, EX_reg_write_w, EX_mem_read_w, EX_mem_to_reg_w, EX_mem_write_w, 
@@ -239,6 +247,7 @@ Pipeline_Register
 )
 MEM_WB_PIPELINE
 (
+	.enable(1'b1),
 	.clk(clk),
 	.reset(reset),
 	.dataIn({MEM_reg_dst_w, MEM_reg_write_w, MEM_mem_to_reg_w, MEM_jump_w, MEM_alu_result_w, read_data_out_w, MEM_pc_4_w , MEM_instr_w}),	
@@ -459,13 +468,60 @@ ALU_CTRL
 );
 
 
+//Se agrega forwarding unit
+Forwarding_Unit
+Forwarding_Unit
+(
+	.MEM_reg_write(MEM_reg_write_w),
+	.WB_reg_write(WB_reg_write_w),
+	.MEM_reg_rd(MEM_instr_w[15:11]),
+	.WB_reg_rd(WB_instr_w[15:11]),
+	.EX_reg_rt(EX_instr_w[20:16]),
+	.EX_reg_rs(EX_instr_w[25:21]),
+	.forward_A(forward_A_sel_w),
+	.forward_B(forward_B_sel_w)
+);
+
+
+//Multiplexor que toma selector de Forwarding A
+Multiplexer_3_to_1
+#(
+	.N_BITS(32)
+)
+MUX_Forward_A_ALU_A
+(
+	.selector_i(forward_A_sel_w),
+	.data_0_i(read_ata_2_r_nmmediate_w),
+	.data_1_i(read_data_or_alu_result_w),
+	.data_2_i(MEM_alu_result_w),
+	.mux_o(ALU_input_A_w)
+
+);
+
+//Multiplexor que toma selector de Forwarding B
+Multiplexer_3_to_1
+#(
+	.N_BITS(32)
+)
+MUX_Forward_B_ALU_B
+(
+	.selector_i(forward_B_sel_w),
+	.data_0_i(EX_read_data_2_w),
+	.data_1_i(read_data_or_alu_result_w),
+	.data_2_i(MEM_alu_result_w),
+	.mux_o(ALU_input_B_w)
+
+);
+
+
+
 //Se agrega shamt
 ALU
 ALU_UNIT
 (
 	.alu_operation_i(alu_operation_w),
-	.a_i(EX_read_data_1_w),
-	.b_i(read_ata_2_r_nmmediate_w),
+	.a_i(ALU_input_A_w),
+	.b_i(ALU_input_B_w),
 	.shamt(EX_instr_w[10:6]), /*Added shamt to ALU unit */
 	.zero_o(zero_w),
 	.alu_data_o(alu_result_w)
@@ -518,7 +574,7 @@ MUX_PCplus4_OR_MUX_MemOrALUres
 );
 
 
-assign alu_result_o = alu_result_w;
+assign alu_result_o = read_data_or_alu_result_w;
 
 
 endmodule

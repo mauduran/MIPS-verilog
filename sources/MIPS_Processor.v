@@ -191,6 +191,25 @@ wire [31:0] ALU_input_A_w;
 wire [31:0] ALU_input_B_w;
 
 
+//Hazard Unit
+wire pc_write_w;
+wire IF_ID_write_w;
+wire stall_w;
+
+//Wires Control Unit
+wire HZ_reg_dst_w;			//
+wire HZ_branch_ne_w;			//
+wire HZ_branch_eq_w;			//
+wire [2:0] HZ_alu_op_w;		//
+wire HZ_alu_src_w;			//
+wire HZ_reg_write_w;
+wire HZ_mem_read_w;
+wire HZ_mem_to_reg_w;
+wire HZ_mem_write_w;
+wire HZ_jump_w;
+
+
+
 
 
 //******************************************************************/
@@ -207,7 +226,7 @@ Pipeline_Register
 )
 IF_ID_PIPELINE
 (
-	.enable(1'b1),
+	.enable(IF_ID_write_w),
 	.clk(clk),
 	.reset(reset),
 	.dataIn({pc_plus_4_w,instruction_w}),
@@ -225,8 +244,8 @@ ID_EX_PIPELINE
 	.enable(1'b1),
 	.clk(clk),
 	.reset(reset),
-	.dataIn({ i_or_r_write_register_w, reg_dst_w, branch_ne_w, branch_eq_w, alu_op_w, alu_rc_w, reg_write_w,
-		mem_read_w, mem_to_reg_w, mem_write_w, jump_w, read_data_1_w,
+	.dataIn({ i_or_r_write_register_w, HZ_reg_dst_w, HZ_branch_ne_w, HZ_branch_eq_w, HZ_alu_op_w, HZ_alu_rc_w, HZ_reg_write_w,
+		HZ_mem_read_w, HZ_mem_to_reg_w, HZ_mem_write_w, HZ_jump_w, read_data_1_w,
 		read_data_2_w, inmmediate_extend_w, ID_pc_4_w, ID_instr_w
 	}),	
 	.dataOut({EX_write_reg, EX_reg_dst_w, EX_branch_ne_w, EX_branch_eq_w,EX_alu_op_w, 
@@ -285,11 +304,43 @@ CONTROL_UNIT
 	.jump_o(jump_w)//bandera para indicar cuando se hace un j o jal.
 );
 
+//Se agrega forwarding unit
+Hazard_Unit
+Hazard_Unit
+(
+	 .EX_mem_read(EX_mem_read_w),
+	 .ID_reg_rs(ID_instr_w[25:21]),
+	 .ID_reg_rt(ID_instr_w[20:16]),
+	 .EX_reg_rt(EX_instr_w[20:16]),
+	 .pc_write_o(pc_write_w),
+	 .IF_ID_write_o(IF_ID_write_w),
+	 .stall_o(stall_w)
+);
+///HZ_reg_dst_w, HZ_branch_ne_w, HZ_branch_eq_w, HZ_alu_op_w, HZ_alu_rc_w, HZ_reg_write_w,
+//HZ_mem_read_w, HZ_mem_to_reg_w, HZ_mem_write_w, HZ_jump_w,
+
+Multiplexer_2_to_1
+#(
+	.N_BITS(12)
+)
+MUX_CONTROL_OR_STALL
+(
+	.selector_i(stall_w),
+	.data_0_i({reg_dst_w, branch_ne_w, branch_eq_w, alu_op_w, alu_rc_w, reg_write_w,
+		mem_read_w, mem_to_reg_w, mem_write_w, jump_w}),
+	.data_1_i(12'b0),
+	.mux_o({HZ_reg_dst_w, HZ_branch_ne_w, HZ_branch_eq_w, HZ_alu_op_w, HZ_alu_rc_w, HZ_reg_write_w,
+		HZ_mem_read_w, HZ_mem_to_reg_w, HZ_mem_write_w, HZ_jump_w})
+
+);
+///
+
 Program_Counter
 PC
 (
 	.clk(clk),
 	.reset(reset),
+	.enable(pc_write_w),
 	.new_pc_i(new_pc_w),
 	.pc_value_o(pc_w)
 );

@@ -44,7 +44,7 @@ module MIPS_Processor
 //
 
 wire reg_dst_w;
-wire alu_rc_w;
+wire alu_src_w;
 wire reg_write_w;
 wire zero_w;
 wire [2:0] alu_op_w;
@@ -244,7 +244,7 @@ ID_EX_PIPELINE
 	.enable(1'b1),
 	.clk(clk),
 	.reset(reset),
-	.dataIn({ i_or_r_write_register_w, HZ_reg_dst_w, HZ_branch_ne_w, HZ_branch_eq_w, HZ_alu_op_w, HZ_alu_rc_w, HZ_reg_write_w,
+	.dataIn({ i_or_r_write_register_w, HZ_reg_dst_w, HZ_branch_ne_w, HZ_branch_eq_w, HZ_alu_op_w, HZ_alu_src_w, HZ_reg_write_w,
 		HZ_mem_read_w, HZ_mem_to_reg_w, HZ_mem_write_w, HZ_jump_w, read_data_1_w,
 		read_data_2_w, inmmediate_extend_w, ID_pc_4_w, ID_instr_w
 	}),	
@@ -266,7 +266,7 @@ EX_MEM_PIPELINE
 	.clk(clk),
 	.reset(reset),
 	.dataIn({EX_write_reg, EX_read_data_1_w, jr_w, EX_reg_dst_w,EX_branch_ne_w, EX_branch_eq_w, EX_reg_write_w, EX_mem_read_w, EX_mem_to_reg_w, EX_mem_write_w, 
-		EX_jump_w,alu_result_w,zero_w,EX_read_data_2_w,EX_pc_4_w,EX_instr_w,pc_branch_w }),	
+		EX_jump_w,alu_result_w,zero_w,ALU_input_B_w,EX_pc_4_w,EX_instr_w,pc_branch_w }),	
 	.dataOut({MEM_write_reg, MEM_read_data_1_w, MEM_jr_w, MEM_reg_dst_w, MEM_branch_ne_w, MEM_branch_eq_w,MEM_reg_write_w,MEM_mem_read_w, MEM_mem_to_reg_w, MEM_mem_write_w, 
 				 MEM_jump_w, MEM_alu_result_w,MEM_zero_w, MEM_read_data_2_w, MEM_pc_4_w, MEM_instr_w, MEM_pc_branch_w})
 );
@@ -296,7 +296,7 @@ CONTROL_UNIT
 	.branch_ne_o(branch_ne_w),
 	.branch_eq_o(branch_eq_w),
 	.alu_op_o(alu_op_w),
-	.alu_src_o(alu_rc_w),
+	.alu_src_o(alu_src_w),
 	.reg_write_o(reg_write_w),
 	.mem_read_o(mem_read_w),// bandera para cuando se lee de memoria
 	.mem_to_reg_o(mem_to_reg_w),//bandera para cuando se escribe de memoria en registro
@@ -316,7 +316,7 @@ Hazard_Unit
 	 .IF_ID_write_o(IF_ID_write_w),
 	 .stall_o(stall_w)
 );
-///HZ_reg_dst_w, HZ_branch_ne_w, HZ_branch_eq_w, HZ_alu_op_w, HZ_alu_rc_w, HZ_reg_write_w,
+///HZ_reg_dst_w, HZ_branch_ne_w, HZ_branch_eq_w, HZ_alu_op_w, HZ_alu_src_w, HZ_reg_write_w,
 //HZ_mem_read_w, HZ_mem_to_reg_w, HZ_mem_write_w, HZ_jump_w,
 
 Multiplexer_2_to_1
@@ -326,10 +326,10 @@ Multiplexer_2_to_1
 MUX_CONTROL_OR_STALL
 (
 	.selector_i(stall_w),
-	.data_0_i({reg_dst_w, branch_ne_w, branch_eq_w, alu_op_w, alu_rc_w, reg_write_w,
+	.data_0_i({reg_dst_w, branch_ne_w, branch_eq_w, alu_op_w, alu_src_w, reg_write_w,
 		mem_read_w, mem_to_reg_w, mem_write_w, jump_w}),
 	.data_1_i(12'b0),
-	.mux_o({HZ_reg_dst_w, HZ_branch_ne_w, HZ_branch_eq_w, HZ_alu_op_w, HZ_alu_rc_w, HZ_reg_write_w,
+	.mux_o({HZ_reg_dst_w, HZ_branch_ne_w, HZ_branch_eq_w, HZ_alu_op_w, HZ_alu_src_w, HZ_reg_write_w,
 		HZ_mem_read_w, HZ_mem_to_reg_w, HZ_mem_write_w, HZ_jump_w})
 
 );
@@ -514,7 +514,7 @@ Multiplexer_2_to_1
 MUX_READ_DATA_2_OR_IMMEDIATE
 (
 	.selector_i(EX_alu_src_w),
-	.data_0_i(EX_read_data_2_w),
+	.data_0_i(ALU_input_B_w),
 	.data_1_i(EX_immediate_extend_w),
 	
 	.mux_o(read_ata_2_r_nmmediate_w)
@@ -541,6 +541,7 @@ Forwarding_Unit
 	.WB_reg_write(WB_reg_write_w),
 	.MEM_reg_rd(MEM_write_reg),
 	.WB_reg_rd(WB_write_reg),
+	.EX_opcode(EX_instr_w[31:26]),
 	.EX_reg_rt(EX_instr_w[20:16]),
 	.EX_reg_rs(EX_instr_w[25:21]),
 	.forward_A(forward_A_sel_w),
@@ -571,7 +572,7 @@ Multiplexer_3_to_1
 MUX_Forward_B_ALU_B
 (
 	.selector_i(forward_B_sel_w),
-	.data_0_i(read_ata_2_r_nmmediate_w),
+	.data_0_i(EX_read_data_2_w),
 	.data_1_i(read_data_or_alu_result_w),
 	.data_2_i(MEM_alu_result_w),
 	.mux_o(ALU_input_B_w)
@@ -586,7 +587,7 @@ ALU_UNIT
 (
 	.alu_operation_i(alu_operation_w),
 	.a_i(ALU_input_A_w),
-	.b_i(ALU_input_B_w),
+	.b_i(read_ata_2_r_nmmediate_w),
 	.shamt(EX_instr_w[10:6]), /*Added shamt to ALU unit */
 	.zero_o(zero_w),
 	.alu_data_o(alu_result_w)

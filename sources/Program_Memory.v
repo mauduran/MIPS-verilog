@@ -36,7 +36,7 @@ assign real_address_r = (address_i[(DATA_WIDTH-1):0]-32'h400000)>>2 ;
 
 	initial
 	begin
-		$readmemh("C:/MIPS/sources/testHazard.dat", rom);
+		$readmemh("C:/MIPS/sources/hanoiTowers_Pipelined.dat", rom);
 	end
 
 	always @ (real_address_r)

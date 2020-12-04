@@ -265,7 +265,7 @@ EX_MEM_PIPELINE
 	.enable(1'b1),
 	.clk(clk),
 	.reset(reset),
-	.dataIn({EX_write_reg, EX_read_data_1_w, jr_w, EX_reg_dst_w,EX_branch_ne_w, EX_branch_eq_w, EX_reg_write_w, EX_mem_read_w, EX_mem_to_reg_w, EX_mem_write_w, 
+	.dataIn({EX_write_reg, ALU_input_A_w, jr_w, EX_reg_dst_w,EX_branch_ne_w, EX_branch_eq_w, EX_reg_write_w, EX_mem_read_w, EX_mem_to_reg_w, EX_mem_write_w, 
 		EX_jump_w,alu_result_w,zero_w,ALU_input_B_w,EX_pc_4_w,EX_instr_w,pc_branch_w }),	
 	.dataOut({MEM_write_reg, MEM_read_data_1_w, MEM_jr_w, MEM_reg_dst_w, MEM_branch_ne_w, MEM_branch_eq_w,MEM_reg_write_w,MEM_mem_read_w, MEM_mem_to_reg_w, MEM_mem_write_w, 
 				 MEM_jump_w, MEM_alu_result_w,MEM_zero_w, MEM_read_data_2_w, MEM_pc_4_w, MEM_instr_w, MEM_pc_branch_w})

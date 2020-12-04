@@ -4,8 +4,6 @@
  Main:
  	nop
  	nop
- 	nop
- 	nop
  	addi $s0, $zero, 3 # Carga n
  	lui $at, 0x1001 # Carga de parte alta de dirección
  	ori $s1, $at, 0 # Carga de dir de inicio de Torre1 a $s1
@@ -17,8 +15,6 @@
 	jal Fill_Tower_With_Disks
 	nop
 	nop
-	nop
-	nop
 	add $a0, $zero, $s1
 	add $a1, $zero, $s3
 	add $a2, $zero, $s2
@@ -27,14 +23,10 @@
 	jal Solve_Hanoi_Tower
 	nop
 	nop
-	nop
-	nop
 	j exit
 	nop
 	nop
-	nop
-	nop
-	
+
 MoveDisk: #a0 = fromTower, a1 = destTower
 	addi $a0,$a0, -4 #Se actualizan direcciones a las que deben apuntar los punteros. 
 	lw $t2, 0($a0) #Se lee la posición anterior de la Torre de origen
@@ -44,19 +36,16 @@ MoveDisk: #a0 = fromTower, a1 = destTower
 	jr $ra
 	nop
 	nop
-	nop
-	nop
+
 Solve_Hanoi_Tower: #a0 = fromTower, a1 = destTower, a2 = tempTower, a3 = n
 	bne $a3, $zero, Recursion_Loop # mientras a3 > 0 Recursion_Loop
 	nop
 	nop
-	nop
-	nop
+
 	jr $ra
 	nop
 	nop
-	nop
-	nop
+
 Recursion_Loop:	
 	#Guardado de argumentos a0 = fromTower, a1 = destTower, 
 	#a2 = tempTower, a3 = n y ra en stack
@@ -71,16 +60,12 @@ Recursion_Loop:
 	jal Solve_Hanoi_Tower
 	nop
 	nop
-	nop
-	nop
 	#regresamos los valores previos a la llamada recursiva
 	add $t0, $zero, $a1 # temp <- a1 (intercambio a1 y a2)
 	add $a1, $zero, $a2 # a1 <- a2
 	add $a2, $zero, $t0 # a2 <- temp
 
 	jal MoveDisk
-	nop
-	nop
 	nop
 	nop
  	#intercambio $a0 y $a2 
@@ -91,8 +76,7 @@ Recursion_Loop:
 	jal Solve_Hanoi_Tower
 	nop
 	nop
-	nop
-	nop
+
 	#Regresamos a valores previos
 	add $t0, $zero, $a0
 	add $a0, $zero, $a2
@@ -104,8 +88,7 @@ Recursion_Loop:
 	jr $ra	
 	nop
 	nop
-	nop
-	nop
+
 Fill_Tower_With_Disks:
 	#Iterador iniciado en n 
 	add, $t0, $zero, $s0
@@ -119,13 +102,11 @@ Fill_Tower_Loop:
 	bne $t0, $zero Fill_Tower_Loop
 	nop
 	nop
-	nop
-	nop
+
 	jr $ra
 	nop
 	nop
-	nop
-	nop
+
 	
 exit:
 	nop

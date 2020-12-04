@@ -5,6 +5,8 @@
 * Authors:
 *	Mauricio Duran
 *	Ivan Iturbe
+*This unit controls the input of the alu unit by detecting if there is a data hazard between the id/ex, 
+ex/mem or mem/wb stages of the pipeline.
 ******************************************************************/
 
 module Forwarding_Unit

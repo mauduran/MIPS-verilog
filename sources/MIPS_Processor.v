@@ -304,7 +304,7 @@ CONTROL_UNIT
 	.jump_o(jump_w)//bandera para indicar cuando se hace un j o jal.
 );
 
-//Se agrega forwarding unit
+//Unidad de deteccion de dependencia de datos con lw.
 Hazard_Unit
 Hazard_Unit
 (
@@ -316,9 +316,9 @@ Hazard_Unit
 	 .IF_ID_write_o(IF_ID_write_w),
 	 .stall_o(stall_w)
 );
-///HZ_reg_dst_w, HZ_branch_ne_w, HZ_branch_eq_w, HZ_alu_op_w, HZ_alu_src_w, HZ_reg_write_w,
-//HZ_mem_read_w, HZ_mem_to_reg_w, HZ_mem_write_w, HZ_jump_w,
 
+//Multiplexor para asignar valores normales o 0 a banderas de control
+//segun deba hacerse un stall.
 Multiplexer_2_to_1
 #(
 	.N_BITS(12)
@@ -533,7 +533,7 @@ ALU_CTRL
 );
 
 
-//Se agrega forwarding unit
+//SUnidad de deteccion de dependencia de datos 
 Forwarding_Unit
 Forwarding_Unit
 (

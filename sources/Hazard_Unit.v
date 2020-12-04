@@ -5,6 +5,8 @@
 * Authors:
 *	Mauricio Duran
 *	Ivan Iturbe
+*This unit controls stalls the pc unit, the if/id pipeline register and assigns 0 to the control flags for lw 
+data hazard detection.
 ******************************************************************/
 
 module Hazard_Unit

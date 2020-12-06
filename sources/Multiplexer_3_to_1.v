@@ -1,6 +1,6 @@
 /******************************************************************
 * Description
-*	This is a  a 3to1 multiplexer that can be parameterized in its bit-width.
+*	This is a  a 3 to 1 multiplexer that can be parameterized in its bit-width.
 *	1.0
 * Authors:
 *	Mauricio Duran 

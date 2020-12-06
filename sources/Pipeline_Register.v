@@ -19,6 +19,7 @@ module Pipeline_Register
 	input clk,
 	input reset,
 	input enable,
+	input flush,
 	input [N-1:0] dataIn,
 	output reg [N-1:0] dataOut
 );
@@ -28,11 +29,11 @@ module Pipeline_Register
 //Se hace switch case para realizar operaciones segun sea necesario  
    always @ (negedge clk)
      begin
-		if(reset==0)
+		if(reset==0 || flush) //flush
 			dataOut <= 0;
-		else
-			if(enable == 1)
-				dataOut <= dataIn;
+		else if(enable == 1)
+			dataOut <= dataIn;
+
      end
 	  
 endmodule 

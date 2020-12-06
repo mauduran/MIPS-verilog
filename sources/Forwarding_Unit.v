@@ -15,7 +15,6 @@ module Forwarding_Unit
 	input [4:0] WB_reg_rd,
 	input [4:0] EX_reg_rt,
 	input [4:0] EX_reg_rs,
-	input [5:0] EX_opcode,
 	output [1:0] forward_A,
 	output [1:0] forward_B
 );

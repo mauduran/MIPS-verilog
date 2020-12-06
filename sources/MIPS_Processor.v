@@ -196,7 +196,7 @@ wire pc_write_w;
 wire IF_ID_write_w;
 wire stall_w;
 
-//Wires Control Unit
+//Wires  Hazard Detection
 wire HZ_reg_dst_w;			//
 wire HZ_branch_ne_w;			//
 wire HZ_branch_eq_w;			//
@@ -208,6 +208,9 @@ wire HZ_mem_to_reg_w;
 wire HZ_mem_write_w;
 wire HZ_jump_w;
 
+wire IF_ID_flush_w;
+wire ID_EX_flush_w;
+wire EX_MEM_flush_w;
 
 
 
@@ -229,9 +232,11 @@ IF_ID_PIPELINE
 	.enable(IF_ID_write_w),
 	.clk(clk),
 	.reset(reset),
+	.flush(1'b0),
 	.dataIn({pc_plus_4_w,instruction_w}),
 	.dataOut({ID_pc_4_w,ID_instr_w})
 );
+
 
 ////ID/EX
 Pipeline_Register
@@ -244,6 +249,7 @@ ID_EX_PIPELINE
 	.enable(1'b1),
 	.clk(clk),
 	.reset(reset),
+	.flush(ID_EX_flush_w),
 	.dataIn({ i_or_r_write_register_w, HZ_reg_dst_w, HZ_branch_ne_w, HZ_branch_eq_w, HZ_alu_op_w, HZ_alu_src_w, HZ_reg_write_w,
 		HZ_mem_read_w, HZ_mem_to_reg_w, HZ_mem_write_w, HZ_jump_w, read_data_1_w,
 		read_data_2_w, inmmediate_extend_w, ID_pc_4_w, ID_instr_w
@@ -253,6 +259,8 @@ ID_EX_PIPELINE
 		EX_jump_w, EX_read_data_1_w, EX_read_data_2_w, EX_immediate_extend_w, 
 		EX_pc_4_w, EX_instr_w})
 );
+
+
 
 ////EX/MEM
 Pipeline_Register
@@ -265,6 +273,7 @@ EX_MEM_PIPELINE
 	.enable(1'b1),
 	.clk(clk),
 	.reset(reset),
+	.flush(EX_MEM_flush_w),
 	.dataIn({EX_write_reg, ALU_input_A_w, jr_w, EX_reg_dst_w,EX_branch_ne_w, EX_branch_eq_w, EX_reg_write_w, EX_mem_read_w, EX_mem_to_reg_w, EX_mem_write_w, 
 		EX_jump_w,alu_result_w,zero_w,ALU_input_B_w,EX_pc_4_w,EX_instr_w,pc_branch_w }),	
 	.dataOut({MEM_write_reg, MEM_read_data_1_w, MEM_jr_w, MEM_reg_dst_w, MEM_branch_ne_w, MEM_branch_eq_w,MEM_reg_write_w,MEM_mem_read_w, MEM_mem_to_reg_w, MEM_mem_write_w, 
@@ -283,6 +292,7 @@ MEM_WB_PIPELINE
 	.enable(1'b1),
 	.clk(clk),
 	.reset(reset),
+	.flush(1'b0),
 	.dataIn({MEM_write_reg, MEM_reg_dst_w, MEM_reg_write_w, MEM_mem_to_reg_w, MEM_jump_w, MEM_alu_result_w, read_data_out_w, MEM_pc_4_w , MEM_instr_w}),	
 	.dataOut({WB_write_reg, WB_reg_dst_w, WB_reg_write_w, WB_mem_to_reg_w, WB_jump_w, WB_alu_result_w,WB_read_data_w, WB_pc_4_w, WB_instr_w})
 );
@@ -304,7 +314,7 @@ CONTROL_UNIT
 	.jump_o(jump_w)//bandera para indicar cuando se hace un j o jal.
 );
 
-//Se agrega forwarding unit
+//Se agrega hazard detection unit
 Hazard_Unit
 Hazard_Unit
 (
@@ -312,9 +322,15 @@ Hazard_Unit
 	 .ID_reg_rs(ID_instr_w[25:21]),
 	 .ID_reg_rt(ID_instr_w[20:16]),
 	 .EX_reg_rt(EX_instr_w[20:16]),
+	 .MEM_branch_i((MEM_zero_w & MEM_branch_eq_w) | (~MEM_zero_w & MEM_branch_ne_w)),
+	 .MEM_jump_i(MEM_jump_w),
+	 .MEM_jr_i(MEM_jr_w),
 	 .pc_write_o(pc_write_w),
 	 .IF_ID_write_o(IF_ID_write_w),
-	 .stall_o(stall_w)
+	 .stall_o(stall_w),
+	 .IF_ID_flush(IF_ID_flush_w),
+	 .ID_EX_flush(ID_EX_flush_w),
+	 .EX_MEM_flush(EX_MEM_flush_w)
 );
 ///HZ_reg_dst_w, HZ_branch_ne_w, HZ_branch_eq_w, HZ_alu_op_w, HZ_alu_src_w, HZ_reg_write_w,
 //HZ_mem_read_w, HZ_mem_to_reg_w, HZ_mem_write_w, HZ_jump_w,
@@ -541,7 +557,6 @@ Forwarding_Unit
 	.WB_reg_write(WB_reg_write_w),
 	.MEM_reg_rd(MEM_write_reg),
 	.WB_reg_rd(WB_write_reg),
-	.EX_opcode(EX_instr_w[31:26]),
 	.EX_reg_rt(EX_instr_w[20:16]),
 	.EX_reg_rs(EX_instr_w[25:21]),
 	.forward_A(forward_A_sel_w),

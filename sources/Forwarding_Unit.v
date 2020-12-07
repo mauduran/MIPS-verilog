@@ -26,6 +26,6 @@ module Forwarding_Unit
 								  (WB_reg_write==1 && WB_reg_rd!=0 && WB_reg_rd==EX_reg_rs)? 2'b01: 2'b00;
 
 	assign forward_B 		= (MEM_reg_write==1 && MEM_reg_rd!=0 && MEM_reg_rd==EX_reg_rt)? 2'b10: 
-								  (WB_reg_write==1 && WB_reg_rd!=0 && WB_reg_rd==EX_reg_rt)? 2'b01: 2'b00; //EX_opcode==0 
+								  (WB_reg_write==1 && WB_reg_rd!=0 && WB_reg_rd==EX_reg_rt)? 2'b01: 2'b00;  
 
 endmodule 

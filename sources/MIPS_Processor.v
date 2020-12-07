@@ -250,8 +250,8 @@ ID_EX_PIPELINE
 	.clk(clk),
 	.reset(reset),
 	.flush(ID_EX_flush_w),
-	.dataIn({ i_or_r_write_register_w, HZ_reg_dst_w, HZ_branch_ne_w, HZ_branch_eq_w, HZ_alu_op_w, HZ_alu_src_w, HZ_reg_write_w,
-		HZ_mem_read_w, HZ_mem_to_reg_w, HZ_mem_write_w, HZ_jump_w, read_data_1_w,
+	.dataIn({ i_or_r_write_register_w, HZ_reg_dst_w, HZ_branch_ne_w, HZ_branch_eq_w, HZ_alu_op_w, HZ_alu_src_w, 
+		HZ_reg_write_w,HZ_mem_read_w, HZ_mem_to_reg_w, HZ_mem_write_w, HZ_jump_w, read_data_1_w,
 		read_data_2_w, inmmediate_extend_w, ID_pc_4_w, ID_instr_w
 	}),	
 	.dataOut({EX_write_reg, EX_reg_dst_w, EX_branch_ne_w, EX_branch_eq_w,EX_alu_op_w, 
@@ -274,10 +274,12 @@ EX_MEM_PIPELINE
 	.clk(clk),
 	.reset(reset),
 	.flush(EX_MEM_flush_w),
-	.dataIn({EX_write_reg, ALU_input_A_w, jr_w, EX_reg_dst_w,EX_branch_ne_w, EX_branch_eq_w, EX_reg_write_w, EX_mem_read_w, EX_mem_to_reg_w, EX_mem_write_w, 
+	.dataIn({EX_write_reg, ALU_input_A_w, jr_w, EX_reg_dst_w,EX_branch_ne_w, EX_branch_eq_w, EX_reg_write_w, 
+		EX_mem_read_w, EX_mem_to_reg_w, EX_mem_write_w, 
 		EX_jump_w,alu_result_w,zero_w,ALU_input_B_w,EX_pc_4_w,EX_instr_w,pc_branch_w }),	
-	.dataOut({MEM_write_reg, MEM_read_data_1_w, MEM_jr_w, MEM_reg_dst_w, MEM_branch_ne_w, MEM_branch_eq_w,MEM_reg_write_w,MEM_mem_read_w, MEM_mem_to_reg_w, MEM_mem_write_w, 
-				 MEM_jump_w, MEM_alu_result_w,MEM_zero_w, MEM_read_data_2_w, MEM_pc_4_w, MEM_instr_w, MEM_pc_branch_w})
+	.dataOut({MEM_write_reg, MEM_read_data_1_w, MEM_jr_w, MEM_reg_dst_w, MEM_branch_ne_w, MEM_branch_eq_w,
+		MEM_reg_write_w,MEM_mem_read_w, MEM_mem_to_reg_w, MEM_mem_write_w, 
+		MEM_jump_w, MEM_alu_result_w,MEM_zero_w, MEM_read_data_2_w, MEM_pc_4_w, MEM_instr_w, MEM_pc_branch_w})
 );
 
 
@@ -293,8 +295,10 @@ MEM_WB_PIPELINE
 	.clk(clk),
 	.reset(reset),
 	.flush(1'b0),
-	.dataIn({MEM_write_reg, MEM_reg_dst_w, MEM_reg_write_w, MEM_mem_to_reg_w, MEM_jump_w, MEM_alu_result_w, read_data_out_w, MEM_pc_4_w , MEM_instr_w}),	
-	.dataOut({WB_write_reg, WB_reg_dst_w, WB_reg_write_w, WB_mem_to_reg_w, WB_jump_w, WB_alu_result_w,WB_read_data_w, WB_pc_4_w, WB_instr_w})
+	.dataIn({MEM_write_reg, MEM_reg_dst_w, MEM_reg_write_w, MEM_mem_to_reg_w, MEM_jump_w, 
+				MEM_alu_result_w, read_data_out_w, MEM_pc_4_w , MEM_instr_w}),	
+	.dataOut({WB_write_reg, WB_reg_dst_w, WB_reg_write_w, WB_mem_to_reg_w, WB_jump_w, 
+				WB_alu_result_w,WB_read_data_w, WB_pc_4_w, WB_instr_w})
 );
 
 
@@ -537,8 +541,8 @@ MUX_READ_DATA_2_OR_IMMEDIATE
 	.mux_o(read_ata_2_r_nmmediate_w)
 
 );
-//Se agrega bandera de jr
 
+//Se agrega bandera de jr
 ALU_Control
 ALU_CTRL
 (
@@ -550,7 +554,7 @@ ALU_CTRL
 );
 
 
-//SUnidad de deteccion de dependencia de datos 
+//Unidad de deteccion de dependencia de datos 
 Forwarding_Unit
 Forwarding_Unit
 (

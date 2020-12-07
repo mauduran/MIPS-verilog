@@ -7,6 +7,8 @@
 *	Ivan Iturbe
 *This unit controls stalls the pc unit, the if/id pipeline register and assigns 0 to the control flags for lw 
 data hazard detection.
+* Additionally, it takes signals of branch, jump or jr to flush instructions that are not going to be used because
+* of new PC location
 ******************************************************************/
 
 module Hazard_Unit

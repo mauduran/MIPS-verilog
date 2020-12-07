@@ -7,6 +7,7 @@
 *  Ivan Iturbe
 ******************************************************************/
 
+//Multiplexor de 3 a 1 utilizado para definir la entrada A y B de forwarding unit.
 module Multiplexer_3_to_1
 #(
 	parameter N_BITS=32
